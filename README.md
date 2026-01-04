@@ -391,6 +391,35 @@ docker compose --profile monitoring up -d
 
 **📖 For detailed setup and dashboard guide, see [docs/monitoring.md](docs/monitoring.md)**
 
+### Backups & Disaster Recovery
+
+Protect your configuration with automated or manual backups:
+
+```bash
+# Manual backup
+./scripts/backup.sh
+
+# Setup automated daily backups (macOS)
+./scripts/setup-backup-automation.sh
+```
+
+**Features:**
+- Backs up qBittorrent config, Gluetun config, and optionally monitoring data
+- Automated daily backups via macOS launchd
+- 7-day retention by default (configurable)
+- Easy restore with interactive selection
+
+**Restore from backup:**
+```bash
+# List available backups
+./scripts/restore.sh --list
+
+# Interactive restore
+./scripts/restore.sh
+```
+
+**📖 For complete backup guide, see [docs/backups.md](docs/backups.md)**
+
 ## Security Notes
 
 ### Kill Switch Mechanism
