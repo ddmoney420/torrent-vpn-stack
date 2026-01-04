@@ -10,6 +10,35 @@ A production-ready, security-hardened Docker Compose stack that routes all torre
 
 **Supports Windows 10/11, Linux, and macOS (including Apple Silicon M1/M2/M3).**
 
+---
+
+## ⚡ Quick Start
+
+**Want to get started in 5 minutes?** See the **[Quick Start Guide](QUICKSTART.md)** for express installation and setup.
+
+<details>
+<summary><strong>📦 One-Command Installation</strong></summary>
+
+**macOS / Linux (Homebrew):**
+```bash
+brew tap ddmoney420/torrent-vpn-stack && brew install torrent-vpn-stack
+```
+
+**Arch Linux (AUR):**
+```bash
+yay -S torrent-vpn-stack
+```
+
+**Windows (Chocolatey) - Pending Approval:**
+```powershell
+choco install torrent-vpn-stack
+```
+
+Then follow the [Quick Start Guide](QUICKSTART.md) for setup.
+</details>
+
+---
+
 ## Features
 
 ### Security & Privacy
@@ -36,20 +65,26 @@ A production-ready, security-hardened Docker Compose stack that routes all torre
 
 ## Table of Contents
 
+**New User?** Start with the **[⚡ Quick Start Guide](QUICKSTART.md)**
+
 - [Prerequisites](#prerequisites)
 - [VPN Provider Selection](#vpn-provider-selection)
 - [Installation](#installation)
-  - [Package Managers](#package-managers-recommended)
+  - [Package Managers (Recommended)](#package-managers-recommended)
   - [Manual Installation](#manual-installation-git-clone)
-- [Quick Start](#quick-start)
+- [Quick Start (Inline)](#quick-start-1)
 - [Detailed Setup](#detailed-setup)
 - [Configuration](#configuration)
 - [Usage](#usage)
+  - [Starting and Stopping](#starting-and-stopping)
+  - [Accessing from LAN](#accessing-from-lan)
+  - [Backups & Disaster Recovery](#backups--disaster-recovery)
 - [Security Notes](#security-notes)
 - [Troubleshooting](#troubleshooting)
 - [FAQ](#faq)
 - [Architecture](#architecture)
 - [Contributing](#contributing)
+- [License](#license)
 
 ## Prerequisites
 

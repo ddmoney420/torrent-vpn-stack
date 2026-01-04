@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   # Gluetun VPN Container - All traffic routes through this
   gluetun:
