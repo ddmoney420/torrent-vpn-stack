@@ -104,24 +104,26 @@ services:
     # No ports here - they're defined on gluetun service
     # No separate healthcheck - depends on gluetun health
 
-  # Port Sync Helper (optional) - Keeps qBittorrent port in sync with Gluetun
-  # Uncomment if your VPN provider supports port forwarding
-  # gluetun-qbittorrent-sync:
-  #   image: ghcr.io/snoringdragon/gluetun-qbittorrent-port-manager:latest
-  #   container_name: gluetun-qbittorrent-sync
-  #   network_mode: "service:gluetun"
-  #   depends_on:
-  #     gluetun:
-  #       condition: service_healthy
-  #     qbittorrent:
-  #       condition: service_started
-  #   environment:
-  #     - QBITTORRENT_SERVER=localhost
-  #     - QBITTORRENT_PORT=8080
-  #     - QBITTORRENT_USER=${QBITTORRENT_USER:-admin}
-  #     - QBITTORRENT_PASS=${QBITTORRENT_PASS}
-  #     - GTU_SYNC_INTERVAL_SECONDS=300
-  #   restart: unless-stopped
+  # Port Sync Helper - Keeps qBittorrent port in sync with Gluetun
+  # Only runs if VPN_PORT_FORWARDING=on in .env
+  gluetun-qbittorrent-sync:
+    image: ghcr.io/snoringdragon/gluetun-qbittorrent-port-manager:latest
+    container_name: gluetun-qbittorrent-sync
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+      qbittorrent:
+        condition: service_started
+    environment:
+      - QBITTORRENT_SERVER=localhost
+      - QBITTORRENT_PORT=8080
+      - QBITTORRENT_USER=${QBITTORRENT_USER:-admin}
+      - QBITTORRENT_PASS=${QBITTORRENT_PASS}
+      - GTU_SYNC_INTERVAL_SECONDS=${PORT_SYNC_INTERVAL:-300}
+    restart: unless-stopped
+    profiles:
+      - port-forwarding
 
 networks:
   vpn-network:
