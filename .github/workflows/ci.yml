@@ -64,10 +64,50 @@ jobs:
           config_file: .markdownlint.json
           ignore_files: .git/
 
+  cross-platform-test:
+    name: Cross-Platform Test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Test platform detection (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          chmod +x scripts/detect-platform.sh
+          source scripts/detect-platform.sh
+          echo "Platform detected: $PLATFORM"
+          echo "Platform name: $PLATFORM_NAME"
+
+      - name: Test platform detection (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          source scripts/detect-platform.sh
+          echo "Platform detected: $PLATFORM"
+          echo "Platform name: $PLATFORM_NAME"
+
+      - name: Validate Docker Compose
+        run: docker compose config --quiet
+
+      - name: Test backup script syntax (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          chmod +x scripts/backup.sh
+          bash -n scripts/backup.sh
+
+      - name: Test backup script syntax (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: bash -n scripts/backup.sh
+
   all-checks:
     name: All Checks Passed
     runs-on: ubuntu-latest
-    needs: [shellcheck, yaml-lint, docker-compose-validate, markdown-lint]
+    needs: [shellcheck, yaml-lint, docker-compose-validate, markdown-lint, cross-platform-test]
     steps:
       - name: All checks passed
         run: echo "All CI checks passed successfully!"
