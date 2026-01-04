@@ -6,6 +6,7 @@
 set -e  # Exit on error
 
 # Colors for output
+# shellcheck disable=SC2034  # RED defined for potential future use
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -63,14 +64,14 @@ prompt() {
     local is_secret=${4:-false}
 
     if [ -n "$default_value" ]; then
-        read -p "${prompt_text} [${default_value}]: " value
+        read -r -p "${prompt_text} [${default_value}]: " value
         value=${value:-$default_value}
     else
         if [ "$is_secret" = true ]; then
-            read -sp "${prompt_text}: " value
+            read -r -sp "${prompt_text}: " value
             echo
         else
-            read -p "${prompt_text}: " value
+            read -r -p "${prompt_text}: " value
         fi
     fi
 
@@ -135,7 +136,7 @@ echo ""
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # macOS
     LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || echo "192.168.1.100")
-    DETECTED_SUBNET=$(echo $LOCAL_IP | awk -F. '{print $1"."$2"."$3".0/24"}')
+    DETECTED_SUBNET=$(echo "$LOCAL_IP" | awk -F. '{print $1"."$2"."$3".0/24"}')
 else
     # Linux
     DETECTED_SUBNET=$(ip route | grep default | awk '{print $3}' | awk -F. '{print $1"."$2"."$3".0/24"}')

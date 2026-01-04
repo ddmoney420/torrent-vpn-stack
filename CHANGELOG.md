@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- GitHub Actions CI/CD pipeline (`.github/workflows/ci.yml`)
+  - ShellCheck linting for all bash scripts
+  - YAML linting for Docker Compose files and workflows
+  - Docker Compose configuration validation
+  - Markdown linting for documentation files
+- Markdownlint configuration (`.markdownlint.json`)
+- CI status badge in README
+
+### Fixed
+- ShellCheck warnings in `scripts/setup.sh`:
+  - Added shellcheck directive for unused RED color variable
+  - Added `-r` flag to all `read` commands to properly handle backslashes
+  - Quoted `$LOCAL_IP` variable to prevent word splitting
+- ShellCheck warning in `scripts/verify-vpn.sh`:
+  - Quoted URL with `${WEBUI_PORT}` variable expansion
+
+### Changed
+- All shell scripts now pass ShellCheck linting with zero warnings
+- Documentation now passes markdownlint validation
+
 ## [1.0.0] - 2026-01-03
 
 ### Added

@@ -118,7 +118,7 @@ echo ""
 # Check qBittorrent Web UI accessibility
 echo -e "${BLUE}[7/7]${NC} Checking qBittorrent Web UI..."
 WEBUI_PORT=$(grep QBITTORRENT_WEBUI_PORT .env 2>/dev/null | cut -d= -f2 || echo "8080")
-WEBUI_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:${WEBUI_PORT} 2>/dev/null || echo "000")
+WEBUI_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${WEBUI_PORT}" 2>/dev/null || echo "000")
 
 if [ "$WEBUI_RESPONSE" = "200" ] || [ "$WEBUI_RESPONSE" = "401" ]; then
     echo -e "${GREEN}✓ qBittorrent Web UI is accessible at http://localhost:${WEBUI_PORT}${NC}"
