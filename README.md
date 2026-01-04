@@ -225,7 +225,8 @@ docker compose up -d
 ```
 
 **📖 [Chocolatey Installation Guide](packaging/chocolatey/README.md)**
-**Status**: Submitted to Chocolatey Community Repository - pending moderation (24-48 hours)
+**Status**: Resubmitted with fixes - pending moderation (24-48 hours)
+**Note**: Fixed Docker dependency issue, now checks for Docker in install script
 
 ### Manual Installation (Git Clone)
 
