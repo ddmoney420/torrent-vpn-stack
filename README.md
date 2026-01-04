@@ -134,10 +134,12 @@ docker compose up -d
 
 **📖 [Homebrew Installation Guide](packaging/homebrew/README.md)**
 
-#### Windows (Chocolatey)
+#### Windows (Chocolatey) ⏳
+
+*Pending moderator approval (24-48 hours)*
 
 ```powershell
-# Install via Chocolatey
+# Will be available as:
 choco install torrent-vpn-stack
 
 # Quick start after installation
@@ -147,14 +149,16 @@ docker compose up -d
 ```
 
 **📖 [Chocolatey Installation Guide](packaging/chocolatey/README.md)**
+**Status**: Submitted, awaiting approval
 
-#### Arch Linux (AUR)
+#### Arch Linux (AUR) ⏳
+
+*Ready to publish (requires SSH setup)*
 
 ```bash
-# Using yay
+# Will be available as:
 yay -S torrent-vpn-stack
-
-# Using paru
+# OR
 paru -S torrent-vpn-stack
 
 # Quick start after installation
@@ -164,6 +168,7 @@ docker compose up -d
 ```
 
 **📖 [AUR Installation Guide](packaging/aur/README.md)**
+**Status**: Package ready, pending SSH push
 
 ### Manual Installation (Git Clone)
 
