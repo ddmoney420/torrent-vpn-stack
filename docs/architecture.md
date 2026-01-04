@@ -10,6 +10,7 @@
 - [Container Interaction](#container-interaction)
 - [Kill Switch Mechanism](#kill-switch-mechanism)
 - [Port Forwarding Architecture](#port-forwarding-architecture)
+- [Platform-Specific Architecture](#platform-specific-architecture)
 - [Persistence & Storage](#persistence--storage)
 - [Failure Modes & Recovery](#failure-modes--recovery)
 
@@ -17,7 +18,7 @@
 
 ## Overview
 
-This stack implements a secure, containerized torrent downloader that routes **all** traffic through a VPN connection with multiple layers of leak protection. The architecture is designed for macOS (Apple Silicon) but is portable to any Docker-capable platform.
+This stack implements a secure, containerized torrent downloader that routes **all** traffic through a VPN connection with multiple layers of leak protection. The architecture is **fully cross-platform**, supporting Windows 10/11, Linux (Ubuntu, Debian, Fedora, Arch), and macOS (Intel & Apple Silicon).
 
 ### Core Principles
 
@@ -25,7 +26,8 @@ This stack implements a secure, containerized torrent downloader that routes **a
 2. **Kill Switch**: If VPN fails, torrent client loses all network access
 3. **Least Privilege**: Containers run with minimal capabilities
 4. **Defense in Depth**: Multiple layers of leak protection (IP, DNS, IPv6)
-5. **Usability**: Single configuration file, Web UI access, persistent data
+5. **Cross-Platform**: Native automation for Windows, Linux, and macOS
+6. **Usability**: Single configuration file, Web UI access, persistent data
 
 ---
 
@@ -33,11 +35,11 @@ This stack implements a secure, containerized torrent downloader that routes **a
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│                          macOS Host Machine                         │
-│                      (Apple Silicon / Intel)                        │
+│                          Host Machine                               │
+│         (Windows 10/11, Linux, macOS Intel/Apple Silicon)           │
 │                                                                     │
 │  ┌───────────────────────────────────────────────────────────────┐ │
-│  │                   Docker Desktop for Mac                      │ │
+│  │        Docker Engine (Linux) / Docker Desktop (Win/Mac)       │ │
 │  │                                                               │ │
 │  │  ┌─────────────────────────────────────────────────────────┐ │ │
 │  │  │            Docker Compose Stack                         │ │ │
@@ -320,10 +322,10 @@ qbittorrent:
 4. Downloaded data written to /downloads
    │ (Docker volume mounted to host)
    ▼
-5. File appears in ~/Downloads/torrents on macOS host
+5. File appears in ~/Downloads/torrents on host system
    │ (with PUID/PGID ownership)
    ▼
-6. User accesses file from macOS Finder
+6. User accesses file from host file system (Finder/Explorer/file manager)
 ```
 
 ### Web UI Access Flow
@@ -332,10 +334,10 @@ qbittorrent:
 User Browser (http://localhost:8080)
    │
    ▼
-macOS Host Network Stack
+Host Network Stack
    │
    ▼
-Docker Desktop Network
+Docker Network
    │
    ▼
 Gluetun Container (Port 8080 → Port 8080)
@@ -357,13 +359,13 @@ qBittorrent Web Server
 ### LAN Access Flow (from other devices)
 
 ```
-iPad on LAN (http://192.168.1.100:8080)
+Device on LAN (http://192.168.1.100:8080)
    │
    ▼
 Local Network (192.168.1.0/24)
    │
    ▼
-macOS Host (192.168.1.100)
+Host Machine (192.168.1.100)
    │
    ▼
 Gluetun Firewall Rule Check
@@ -716,6 +718,156 @@ The stack includes a commented-out helper service that automatically syncs the f
 
 ---
 
+## Platform-Specific Architecture
+
+The stack includes cross-platform support with native automation for Windows, Linux, and macOS. This layer sits above the Docker containers and provides platform-specific tooling.
+
+### Platform Detection Layer
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                 scripts/detect-platform.sh                   │
+│                  (Platform Detection Utility)                │
+│                                                             │
+│  Detects:                                                   │
+│  • Operating System (Windows, Linux, macOS)                 │
+│  • WSL vs Native Windows                                    │
+│  • Docker Desktop vs Docker Engine                          │
+│  • Local network configuration                             │
+│                                                             │
+│  Exports:                                                   │
+│  • PLATFORM="macos|linux|windows"                           │
+│  • PLATFORM_NAME="macOS|Linux|Windows (WSL)"                │
+│  • IS_WSL="true|false"                                      │
+│  • IS_DOCKER_DESKTOP="true|false"                           │
+│  • LOCAL_IP, LOCAL_SUBNET                                   │
+│  • CONFIG_DIR, LOG_DIR, CACHE_DIR (platform-specific)      │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Platform-Specific Automation
+
+Each platform has native automation for scheduled backups:
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                   Windows 10/11 (Task Scheduler)               │
+├────────────────────────────────────────────────────────────────┤
+│  Scripts:                                                      │
+│  • setup-backup-automation.ps1     (PowerShell)               │
+│  • remove-backup-automation.ps1    (PowerShell)               │
+│                                                                │
+│  Automation:                                                   │
+│  • Creates Windows Task Scheduler task                         │
+│  • Runs daily at configured hour (default: 3 AM)               │
+│  • Supports both WSL 2 and Git Bash execution                  │
+│                                                                │
+│  Task Configuration:                                           │
+│  • Name: TorrentVPNStackBackup                                 │
+│  • Trigger: Daily schedule                                     │
+│  • Action: Run backup.sh via wsl.exe or bash.exe              │
+│  • Runs as current user (not SYSTEM)                           │
+└────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────┐
+│         Linux (Ubuntu, Debian, Fedora, Arch)                   │
+├────────────────────────────────────────────────────────────────┤
+│  Scripts:                                                      │
+│  • setup-backup-automation-linux.sh                            │
+│  • remove-backup-automation-linux.sh                           │
+│                                                                │
+│  Automation Method 1 (Preferred): systemd User Timers          │
+│  • Creates systemd service unit                                │
+│  • Creates systemd timer unit                                  │
+│  • Runs as user (no root needed)                               │
+│  • Logs to systemd journal                                     │
+│                                                                │
+│  Service: ~/.config/systemd/user/torrent-vpn-backup.service   │
+│  Timer:   ~/.config/systemd/user/torrent-vpn-backup.timer     │
+│                                                                │
+│  Automation Method 2 (Fallback): cron                          │
+│  • Creates crontab entry                                       │
+│  • Runs daily at configured hour                               │
+│  • Logs to ~/.torrent-vpn-stack/backup.log                     │
+└────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────┐
+│         macOS (Intel & Apple Silicon M1/M2/M3)                 │
+├────────────────────────────────────────────────────────────────┤
+│  Scripts:                                                      │
+│  • setup-backup-automation.sh                                  │
+│  • remove-backup-automation.sh                                 │
+│                                                                │
+│  Automation: launchd (macOS native scheduler)                  │
+│  • Creates launchd plist from template                         │
+│  • Installs to /Library/LaunchDaemons/                         │
+│  • Runs daily at configured hour (default: 3 AM)               │
+│                                                                │
+│  Plist: /Library/LaunchDaemons/com.torrent-vpn-stack.backup.plist│
+│  Template: launchd/com.torrent-vpn-stack.backup.plist.template │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Cross-Platform Setup Wizard
+
+The `scripts/setup.sh` wizard uses platform detection for cross-platform compatibility:
+
+```bash
+# Load platform detection
+source scripts/detect-platform.sh
+
+# Platform-specific network detection
+if [[ "${PLATFORM}" == "macos" ]]; then
+    LOCAL_IP=$(ipconfig getifaddr en0)
+elif [[ "${PLATFORM}" == "linux" ]]; then
+    LOCAL_IP=$(hostname -I | awk '{print $1}')
+elif [[ "${PLATFORM}" == "windows" ]]; then
+    LOCAL_IP=$(ipconfig.exe | grep -oP '(?<=IPv4 Address.*:\s)\d+(\.\d+){3}')
+fi
+
+# Platform-specific sed syntax
+if [[ "${PLATFORM}" == "macos" ]]; then
+    sed -i '' "s|^${key}=.*|${key}=${value}|" .env  # macOS requires empty string
+else
+    sed -i "s|^${key}=.*|${key}=${value}|" .env     # Linux and Windows
+fi
+```
+
+### Platform Comparison Matrix
+
+| Feature                  | Windows (WSL/Git Bash) | Linux                 | macOS                 |
+|--------------------------|------------------------|-----------------------|-----------------------|
+| Docker Backend           | Docker Desktop (WSL 2) | Docker Engine (native)| Docker Desktop        |
+| Backup Automation        | Task Scheduler         | systemd/cron          | launchd               |
+| Setup Script             | ✅ Bash (WSL/Git Bash) | ✅ Bash               | ✅ Bash               |
+| Platform Detection       | ✅ Auto-detect         | ✅ Auto-detect        | ✅ Auto-detect        |
+| Network Detection        | ipconfig.exe           | hostname -I, ip addr  | ipconfig getifaddr    |
+| Service Management       | PowerShell             | systemctl, crontab    | launchctl             |
+| Installation Guide       | docs/install-windows.md| docs/install-linux.md | docs/install-macos.md |
+
+### Platform-Specific Paths
+
+```bash
+# Automatically set by scripts/detect-platform.sh
+
+# Windows (WSL or Git Bash)
+CONFIG_DIR="$HOME/.config/torrent-vpn-stack"
+LOG_DIR="$HOME/.local/state/torrent-vpn-stack/logs"
+CACHE_DIR="$HOME/.cache/torrent-vpn-stack"
+
+# Linux (XDG Base Directory Specification)
+CONFIG_DIR="$HOME/.config/torrent-vpn-stack"
+LOG_DIR="/var/log/torrent-vpn-stack"  # or $HOME/.local/state/... if non-root
+CACHE_DIR="$HOME/.cache/torrent-vpn-stack"
+
+# macOS (Apple conventions)
+CONFIG_DIR="$HOME/Library/Application Support/torrent-vpn-stack"
+LOG_DIR="$HOME/Library/Logs/torrent-vpn-stack"
+CACHE_DIR="$HOME/Library/Caches/torrent-vpn-stack"
+```
+
+---
+
 ## Persistence & Storage
 
 ### Volume Architecture
@@ -770,25 +922,45 @@ The stack includes a commented-out helper service that automatically syncs the f
 
 ### Backup Strategy
 
-**Backup Configuration:**
-```bash
-# Backup qBittorrent settings
-docker run --rm -v qbittorrent-config:/data -v $(pwd):/backup \
-  alpine tar czf /backup/qbittorrent-config-$(date +%Y%m%d).tar.gz -C /data .
+The stack includes cross-platform backup and restore scripts. See [Platform-Specific Architecture](#platform-specific-architecture) for automation details.
 
-# Backup Gluetun config
-docker run --rm -v gluetun-config:/data -v $(pwd):/backup \
-  alpine tar czf /backup/gluetun-config-$(date +%Y%m%d).tar.gz -C /data .
+**Manual Backup (Cross-Platform):**
+```bash
+# Run backup script
+./scripts/backup.sh
+
+# Dry-run mode (preview what will be backed up)
+./scripts/backup.sh --dry-run
+
+# Custom backup location
+BACKUP_DIR=~/my-backups ./scripts/backup.sh
+
+# Custom retention (default: 7 days)
+BACKUP_RETENTION_DAYS=14 ./scripts/backup.sh
 ```
 
-**Restore Configuration:**
-```bash
-# Restore qBittorrent settings
-docker run --rm -v qbittorrent-config:/data -v $(pwd):/backup \
-  alpine sh -c "rm -rf /data/* && tar xzf /backup/qbittorrent-config-YYYYMMDD.tar.gz -C /data"
+**Automated Backups:**
 
-# Restart containers
-docker-compose restart
+Choose your platform:
+- **Windows:** `.\scripts\setup-backup-automation.ps1` (PowerShell, requires Administrator)
+- **Linux:** `./scripts/setup-backup-automation-linux.sh` (systemd or cron)
+- **macOS:** `sudo ./scripts/setup-backup-automation.sh` (launchd)
+
+See platform-specific installation guides for details:
+- [Windows Backup Setup](install-windows.md#backup-automation-windows-specific)
+- [Linux Backup Setup](install-linux.md#backup-automation)
+- [macOS Backup Setup](install-macos.md#backup-automation)
+
+**Manual Restore:**
+```bash
+# Interactive restore (choose from available backups)
+./scripts/restore.sh
+
+# Restore specific backup
+./scripts/restore.sh --backup /path/to/backup.tar.gz
+
+# Restore specific volume
+./scripts/restore.sh --backup /path/to/backup.tar.gz --volume qbittorrent
 ```
 
 ---
@@ -802,13 +974,13 @@ docker-compose restart
 | VPN auth failure                | Gluetun logs "auth failed"         | ❌ No (invalid credentials)    | Fix .env, restart              |
 | VPN connection timeout          | Health check fails                 | ✅ Gluetun auto-retries        | Check VPN provider status      |
 | VPN drops mid-session           | Health check fails                 | ✅ Gluetun reconnects          | None (automatic)               |
-| Docker Desktop crashes          | All containers stop                | ❌ No                          | Restart Docker, `docker-compose up -d` |
-| macOS host reboots              | All containers stop                | ✅ If restart:always enabled   | `docker-compose up -d`         |
-| qBittorrent crashes             | Container exits                    | ✅ If restart:unless-stopped   | `docker-compose restart qbittorrent` |
+| Docker crashes                  | All containers stop                | ❌ No                          | Restart Docker, `docker compose up -d` |
+| Host machine reboots            | All containers stop                | ✅ If restart:always enabled   | `docker compose up -d`         |
+| qBittorrent crashes             | Container exits                    | ✅ If restart:unless-stopped   | `docker compose restart qbittorrent` |
 | Disk full (downloads)           | qBittorrent errors                 | ❌ No                          | Free up space                  |
-| Firewall blocks Docker          | Cannot reach Web UI                | ❌ No                          | Adjust macOS firewall          |
+| Firewall blocks Docker          | Cannot reach Web UI                | ❌ No                          | Adjust firewall (UFW/firewalld/Windows Firewall) |
 | .env file deleted               | Containers fail to start           | ❌ No                          | Recreate from .env.example     |
-| Port conflict (8080 in use)     | docker-compose fails               | ❌ No                          | Change QBITTORRENT_WEBUI_PORT  |
+| Port conflict (8080 in use)     | docker compose fails               | ❌ No                          | Change QBITTORRENT_WEBUI_PORT  |
 
 ### Recovery Procedures
 
@@ -862,19 +1034,24 @@ docker port gluetun
 curl -v http://localhost:8080
 # Should get HTTP response (even if 401 auth required)
 
-# 5. Check macOS firewall
-# System Preferences → Security & Privacy → Firewall → Options
+# 5. Check firewall
+# Windows: Windows Defender Firewall → Allow an app
+# Linux: sudo ufw status (UFW) or sudo firewall-cmd --list-all (firewalld)
+# macOS: System Settings → Network → Firewall → Options
 # Ensure Docker is allowed
 ```
 
 **Data Loss Prevention:**
 ```bash
-# Regularly backup qBittorrent config
-# Add to cron (macOS: launchd)
-0 2 * * * cd ~/backups && docker run --rm -v qbittorrent-config:/data -v $(pwd):/backup alpine tar czf /backup/qbit-$(date +\%Y\%m\%d).tar.gz -C /data .
+# Use the automated backup scripts (cross-platform)
+# See Platform-Specific Architecture section above
 
-# Keep last 7 days
-find ~/backups -name "qbit-*.tar.gz" -mtime +7 -delete
+# Windows (PowerShell): .\scripts\setup-backup-automation.ps1
+# Linux: ./scripts/setup-backup-automation-linux.sh
+# macOS: sudo ./scripts/setup-backup-automation.sh
+
+# Or manual backup:
+./scripts/backup.sh
 ```
 
 ---
