@@ -56,6 +56,41 @@ A production-ready, security-hardened Docker Compose stack that routes all torre
 - 20GB free disk space (more for downloads)
 - Stable internet connection
 
+## VPN Provider Selection
+
+**Choosing the right VPN provider is critical for torrent performance.**
+
+### ✅ Recommended for Torrenting (with Port Forwarding)
+
+| Provider | Speed | Privacy | Price/Month | Notes |
+|----------|-------|---------|-------------|-------|
+| **Mullvad** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $5.50 | Best overall, port forwarding on all servers |
+| **ProtonVPN Plus** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $4.99+ | Swiss privacy, port forwarding on Plus+ plans |
+| **Private Internet Access** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | $2.19+ | Budget-friendly, port forwarding supported |
+
+### ⚠️ Not Recommended for Torrenting (no Port Forwarding)
+
+| Provider | Why Not Recommended |
+|----------|---------------------|
+| **NordVPN** | No port forwarding = 60-70% fewer peers, poor seeding |
+| **Surfshark** | No port forwarding, limited torrent performance |
+| **ExpressVPN** | No port forwarding, expensive, no WireGuard |
+
+**Port forwarding allows incoming connections = 2-3x more peers = faster downloads and better seeding.**
+
+### Quick Comparison
+
+- **Best Performance:** Mullvad (port forwarding + WireGuard + privacy)
+- **Best Privacy:** Mullvad or ProtonVPN (Swiss/Swedish jurisdiction)
+- **Best Budget:** PIA ($2.19/month with port forwarding)
+- **Already Have NordVPN?** Works, but expect slower speeds without port forwarding
+
+**📖 Full comparison:** [docs/provider-comparison.md](docs/provider-comparison.md)
+
+**⚡ Performance tuning:** [docs/performance-tuning.md](docs/performance-tuning.md)
+
+**🔧 Provider examples:** See `examples/providers/` for ready-to-use configurations
+
 ## Quick Start
 
 ### 1. Clone and Configure

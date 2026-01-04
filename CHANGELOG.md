@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Multi-VPN Provider Testing and Performance Benchmarking** (Issue #11)
+  - Added provider configuration examples (`examples/providers/`):
+    - Mullvad (port forwarding, WireGuard)
+    - ProtonVPN (port forwarding on Plus plans)
+    - NordVPN (no port forwarding)
+  - Added VPN performance benchmark script (`scripts/benchmark-vpn.sh`):
+    - Tests download speed, latency, DNS resolution
+    - Measures CPU and memory usage
+    - Outputs JSON results for comparison
+  - Added comprehensive provider comparison documentation (`docs/provider-comparison.md`):
+    - Detailed comparison table (port forwarding, speed, privacy, pricing)
+    - Provider-specific analysis and recommendations
+    - Real-world performance expectations
+    - Port forwarding impact analysis
+  - Added performance tuning guide (`docs/performance-tuning.md`):
+    - WireGuard vs OpenVPN comparison
+    - Docker resource optimization
+    - qBittorrent connection settings
+    - Provider-specific tuning tips
+    - Troubleshooting slow speeds
+  - Updated README with VPN provider selection section
+    - Quick comparison table
+    - Recommendations for torrenting
+    - Links to detailed documentation
 - **Automated Backup Solution** (Issue #9)
   - Added `scripts/backup.sh` for manual and automated backups
   - Added `scripts/restore.sh` for interactive and command-line restore
