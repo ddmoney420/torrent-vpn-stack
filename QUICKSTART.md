@@ -10,10 +10,15 @@ Get Torrent VPN Stack running in **5 minutes** or less!
 
 ## Installation (Choose Your Platform)
 
-### macOS / Linux (Homebrew)
+### Linux (Ubuntu, Debian, Fedora, etc.) - Homebrew
+
+**Works on all Linux distributions!**
 
 ```bash
-# Install
+# Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install Torrent VPN Stack
 brew tap ddmoney420/torrent-vpn-stack
 brew install torrent-vpn-stack
 
@@ -21,14 +26,30 @@ brew install torrent-vpn-stack
 cd $(brew --prefix)/opt/torrent-vpn-stack
 ```
 
-### Arch Linux (AUR)
+### Arch Linux / Manjaro - AUR
+
+**Arch Linux users can use AUR instead:**
 
 ```bash
-# Install
+# Install with yay
 yay -S torrent-vpn-stack
+
+# Or install with paru
+paru -S torrent-vpn-stack
 
 # Navigate to installation
 cd /usr/share/torrent-vpn-stack
+```
+
+### macOS (Intel & Apple Silicon)
+
+```bash
+# Install with Homebrew
+brew tap ddmoney420/torrent-vpn-stack
+brew install torrent-vpn-stack
+
+# Navigate to installation
+cd $(brew --prefix)/opt/torrent-vpn-stack
 ```
 
 ### Windows (Chocolatey) - Coming Soon
@@ -41,13 +62,19 @@ choco install torrent-vpn-stack
 cd $env:ProgramData\torrent-vpn-stack
 ```
 
-### Any Platform (Git Clone)
+### Any Platform - Git Clone (Alternative)
+
+**Don't want to use a package manager? Clone directly:**
 
 ```bash
-# Clone repository
 git clone https://github.com/ddmoney420/torrent-vpn-stack.git
 cd torrent-vpn-stack
 ```
+
+**Supported on:**
+- ✅ Linux: Ubuntu 20.04+, Debian 11+, Fedora 35+, Arch, Rocky Linux, AlmaLinux, etc.
+- ✅ macOS: 11+ (Big Sur and newer), Intel and Apple Silicon (M1/M2/M3)
+- ✅ Windows: 10/11 with WSL 2 or Docker Desktop
 
 ## Setup (3 Steps)
 

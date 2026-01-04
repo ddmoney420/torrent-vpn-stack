@@ -19,17 +19,22 @@ A production-ready, security-hardened Docker Compose stack that routes all torre
 <details>
 <summary><strong>📦 One-Command Installation</strong></summary>
 
-**macOS / Linux (Homebrew):**
+**Linux (Ubuntu, Debian, Fedora, etc.) - Homebrew:**
 ```bash
 brew tap ddmoney420/torrent-vpn-stack && brew install torrent-vpn-stack
 ```
 
-**Arch Linux (AUR):**
+**Arch Linux / Manjaro - AUR:**
 ```bash
 yay -S torrent-vpn-stack
 ```
 
-**Windows (Chocolatey) - Pending Approval:**
+**macOS (Intel & Apple Silicon) - Homebrew:**
+```bash
+brew tap ddmoney420/torrent-vpn-stack && brew install torrent-vpn-stack
+```
+
+**Windows - Chocolatey (Pending Approval):**
 ```powershell
 choco install torrent-vpn-stack
 ```
@@ -151,7 +156,9 @@ Choose your preferred installation method:
 
 Install with a single command using your platform's package manager:
 
-#### macOS / Linux (Homebrew) ✅
+#### Linux (All Distributions) - Homebrew ✅
+
+**Supports:** Ubuntu, Debian, Fedora, openSUSE, Rocky Linux, AlmaLinux, and more!
 
 ```bash
 # Option 1: Install from tap
@@ -169,24 +176,9 @@ docker compose up -d
 
 **📖 [Homebrew Installation Guide](packaging/homebrew/README.md)**
 
-#### Windows (Chocolatey) 🔄
+#### Arch Linux / Manjaro - AUR ✅
 
-*Submitted - Pending Moderation*
-
-```powershell
-# Will be available as (pending approval):
-choco install torrent-vpn-stack
-
-# Quick start after installation
-cd $env:ProgramData\torrent-vpn-stack
-torrent-vpn-setup
-docker compose up -d
-```
-
-**📖 [Chocolatey Installation Guide](packaging/chocolatey/README.md)**
-**Status**: Submitted to Chocolatey Community Repository - pending moderation (24-48 hours)
-
-#### Arch Linux (AUR) ✅
+**Arch users can use AUR instead of Homebrew:**
 
 ```bash
 # Using yay
@@ -202,6 +194,38 @@ docker compose up -d
 ```
 
 **📖 [AUR Installation Guide](packaging/aur/README.md)**
+
+#### macOS (Intel & Apple Silicon) - Homebrew ✅
+
+```bash
+# Install from tap
+brew tap ddmoney420/torrent-vpn-stack
+brew install torrent-vpn-stack
+
+# Quick start after installation
+cd $(brew --prefix)/opt/torrent-vpn-stack
+torrent-vpn-setup
+docker compose up -d
+```
+
+**📖 [Homebrew Installation Guide](packaging/homebrew/README.md)**
+
+#### Windows - Chocolatey 🔄
+
+*Submitted - Pending Moderation*
+
+```powershell
+# Will be available as (pending approval):
+choco install torrent-vpn-stack
+
+# Quick start after installation
+cd $env:ProgramData\torrent-vpn-stack
+torrent-vpn-setup
+docker compose up -d
+```
+
+**📖 [Chocolatey Installation Guide](packaging/chocolatey/README.md)**
+**Status**: Submitted to Chocolatey Community Repository - pending moderation (24-48 hours)
 
 ### Manual Installation (Git Clone)
 
