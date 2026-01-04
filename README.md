@@ -37,6 +37,10 @@ A production-ready, security-hardened Docker Compose stack that routes all torre
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
+- [VPN Provider Selection](#vpn-provider-selection)
+- [Installation](#installation)
+  - [Package Managers](#package-managers-recommended)
+  - [Manual Installation](#manual-installation-git-clone)
 - [Quick Start](#quick-start)
 - [Detailed Setup](#detailed-setup)
 - [Configuration](#configuration)
@@ -104,9 +108,66 @@ Choose your platform for detailed installation instructions:
 
 **🔧 Provider examples:** See `examples/providers/` for ready-to-use configurations
 
-## Quick Start
+## Installation
 
-### 1. Clone and Configure
+Choose your preferred installation method:
+
+### Package Managers (Recommended)
+
+Install with a single command using your platform's package manager:
+
+#### macOS / Linux (Homebrew)
+
+```bash
+# Option 1: Install from tap (once published)
+brew tap ddmoney420/torrent-vpn-stack
+brew install torrent-vpn-stack
+
+# Option 2: Install directly
+brew install ddmoney420/torrent-vpn-stack/torrent-vpn-stack
+
+# Quick start after installation
+cd $(brew --prefix)/opt/torrent-vpn-stack
+torrent-vpn-setup
+docker compose up -d
+```
+
+**📖 [Homebrew Installation Guide](packaging/homebrew/README.md)**
+
+#### Windows (Chocolatey)
+
+```powershell
+# Install via Chocolatey
+choco install torrent-vpn-stack
+
+# Quick start after installation
+cd $env:ProgramData\torrent-vpn-stack
+torrent-vpn-setup
+docker compose up -d
+```
+
+**📖 [Chocolatey Installation Guide](packaging/chocolatey/README.md)**
+
+#### Arch Linux (AUR)
+
+```bash
+# Using yay
+yay -S torrent-vpn-stack
+
+# Using paru
+paru -S torrent-vpn-stack
+
+# Quick start after installation
+cd /usr/share/torrent-vpn-stack
+torrent-vpn-setup
+docker compose up -d
+```
+
+**📖 [AUR Installation Guide](packaging/aur/README.md)**
+
+### Manual Installation (Git Clone)
+
+If you prefer manual installation or your platform doesn't have a package manager:
 
 ```bash
 # Clone the repository
@@ -121,7 +182,11 @@ cp .env.example .env
 nano .env  # Edit with your VPN credentials
 ```
 
-### 2. Get VPN Credentials
+## Quick Start
+
+This guide assumes you've already installed via one of the methods above. If using manual installation, start here:
+
+### 1. Get VPN Credentials
 
 **For WireGuard (Recommended):**
 - **Mullvad**: [Account → WireGuard Config](https://mullvad.net/en/account/wireguard-config)
@@ -131,14 +196,31 @@ nano .env  # Edit with your VPN credentials
 **For OpenVPN:**
 - Use your VPN account username and password
 
+### 2. Run Setup Wizard
+
+```bash
+# Package manager installations
+torrent-vpn-setup  # Available system-wide
+
+# Manual installation
+./scripts/setup.sh
+```
+
+The interactive wizard will guide you through:
+- VPN provider selection
+- VPN credentials configuration
+- Network settings
+- Downloads path
+- Security settings
+
 ### 3. Start the Stack
 
 ```bash
 # Start all services in detached mode
-docker-compose up -d
+docker compose up -d
 
 # Check logs to verify VPN connection
-docker-compose logs -f gluetun
+docker compose logs -f gluetun
 
 # Look for: "You are running on the bleeding edge of latest"
 # and "ip getter: 1.2.3.4" (your VPN IP, not your real IP)
@@ -155,10 +237,12 @@ Open http://localhost:8080 (or your configured `QBITTORRENT_WEBUI_PORT`)
 ### 5. Verify VPN & Leak Protection
 
 ```bash
-# Run automated verification
-./scripts/verify-vpn.sh
+# Package manager installations
+torrent-vpn-verify       # Verify VPN connection
+torrent-vpn-check-leaks  # Check for DNS/IP leaks
 
-# Check for DNS leaks
+# Manual installation
+./scripts/verify-vpn.sh
 ./scripts/check-leaks.sh
 ```
 
