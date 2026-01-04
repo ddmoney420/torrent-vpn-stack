@@ -1,0 +1,134 @@
+version: "3.8"
+
+services:
+  # Gluetun VPN Container - All traffic routes through this
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      # qBittorrent Web UI - exposed on Gluetun since qBittorrent uses its network
+      - "${QBITTORRENT_WEBUI_PORT:-8080}:8080"
+      # qBittorrent TCP/UDP ports for connections
+      - "${QBITTORRENT_PORT:-6881}:6881"
+      - "${QBITTORRENT_PORT:-6881}:6881/udp"
+      # Gluetun control server (optional, for healthcheck and port forwarding info)
+      - "${GLUETUN_CONTROL_PORT:-8000}:8000"
+    volumes:
+      - gluetun-config:/gluetun
+    environment:
+      # VPN Provider Configuration
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE:-wireguard}
+
+      # WireGuard Configuration (if using WireGuard)
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      - WIREGUARD_PUBLIC_KEY=${WIREGUARD_PUBLIC_KEY:-}
+      - WIREGUARD_PRESHARED_KEY=${WIREGUARD_PRESHARED_KEY:-}
+      - WIREGUARD_ENDPOINT_IP=${WIREGUARD_ENDPOINT_IP:-}
+      - WIREGUARD_ENDPOINT_PORT=${WIREGUARD_ENDPOINT_PORT:-51820}
+
+      # OpenVPN Configuration (if using OpenVPN)
+      - OPENVPN_USER=${OPENVPN_USER:-}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD:-}
+
+      # Server Selection
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES:-}
+      - SERVER_CITIES=${SERVER_CITIES:-}
+      - SERVER_HOSTNAMES=${SERVER_HOSTNAMES:-}
+
+      # DNS Configuration - Critical for leak protection
+      - DOT=on
+      - DOT_PROVIDERS=cloudflare
+      - BLOCK_MALICIOUS=on
+      - BLOCK_SURVEILLANCE=off
+      - BLOCK_ADS=off
+
+      # IPv6 - Disabled to prevent leaks (most VPNs don't support IPv6)
+      - DISABLE_IPV6=yes
+
+      # Firewall - Kill switch
+      - FIREWALL_OUTBOUND_SUBNETS=${LOCAL_SUBNET:-192.168.1.0/24}
+      - FIREWALL_VPN_INPUT_PORTS=${QBITTORRENT_PORT:-6881}
+
+      # Port Forwarding (if supported by VPN provider)
+      - VPN_PORT_FORWARDING=${VPN_PORT_FORWARDING:-off}
+      - VPN_PORT_FORWARDING_PROVIDER=${VPN_PORT_FORWARDING_PROVIDER:-}
+
+      # Timezone
+      - TZ=${TZ:-America/Los_Angeles}
+
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+
+      # Health check server
+      - HTTPPROXY=off
+      - SHADOWSOCKS=off
+      - HEALTH_SERVER_ADDRESS=:9999
+      - HEALTH_VPN_DURATION_INITIAL=6s
+
+    restart: unless-stopped
+    networks:
+      - vpn-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:9999/healthz || exit 1"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # qBittorrent - Torrent Client
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    # Route ALL traffic through Gluetun VPN (kill switch)
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+      - WEBUI_PORT=8080
+      # Security: Disable UPnP/NAT-PMP for security
+      - DOCKER_MODS=ghcr.io/gabe565/linuxserver-mod-vuetorrent
+    volumes:
+      - qbittorrent-config:/config
+      - ${DOWNLOADS_PATH:-./downloads}:/downloads
+    restart: unless-stopped
+    # No ports here - they're defined on gluetun service
+    # No separate healthcheck - depends on gluetun health
+
+  # Port Sync Helper (optional) - Keeps qBittorrent port in sync with Gluetun
+  # Uncomment if your VPN provider supports port forwarding
+  # gluetun-qbittorrent-sync:
+  #   image: ghcr.io/snoringdragon/gluetun-qbittorrent-port-manager:latest
+  #   container_name: gluetun-qbittorrent-sync
+  #   network_mode: "service:gluetun"
+  #   depends_on:
+  #     gluetun:
+  #       condition: service_healthy
+  #     qbittorrent:
+  #       condition: service_started
+  #   environment:
+  #     - QBITTORRENT_SERVER=localhost
+  #     - QBITTORRENT_PORT=8080
+  #     - QBITTORRENT_USER=${QBITTORRENT_USER:-admin}
+  #     - QBITTORRENT_PASS=${QBITTORRENT_PASS}
+  #     - GTU_SYNC_INTERVAL_SECONDS=300
+  #   restart: unless-stopped
+
+networks:
+  vpn-network:
+    driver: bridge
+
+volumes:
+  gluetun-config:
+    driver: local
+  qbittorrent-config:
+    driver: local
