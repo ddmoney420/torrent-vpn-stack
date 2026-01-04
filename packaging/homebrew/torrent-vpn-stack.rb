@@ -2,7 +2,7 @@ class TorrentVpnStack < Formula
   desc "Cross-platform Docker Compose stack for secure torrenting via VPN"
   homepage "https://github.com/ddmoney420/torrent-vpn-stack"
   url "https://github.com/ddmoney420/torrent-vpn-stack/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "PLACEHOLDER_SHA256"  # Will be updated with actual release
+  sha256 "efb998c1b2be0fba8f4a01341606e352376e4ac7fb603a14c62db33e017734fc"
   license "MIT"
   head "https://github.com/ddmoney420/torrent-vpn-stack.git", branch: "main"
 

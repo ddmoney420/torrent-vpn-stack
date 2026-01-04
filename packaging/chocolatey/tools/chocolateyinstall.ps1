@@ -6,7 +6,7 @@ $ErrorActionPreference = 'Stop'
 $packageName = 'torrent-vpn-stack'
 $version = '1.0.0'
 $url = "https://github.com/ddmoney420/torrent-vpn-stack/archive/refs/tags/v$version.zip"
-$checksum = 'PLACEHOLDER_SHA256'  # Will be updated with actual release
+$checksum = '038f02398241e1ceabeca4f4d6ae5dc9590d6dd8e6d28c6d3801ae4afa65a999'
 $checksumType = 'sha256'
 
 # Installation directory

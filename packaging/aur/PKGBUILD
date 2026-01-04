@@ -13,7 +13,7 @@ optdepends=(
     'cronie: alternative for automated backups'
 )
 source=("${pkgname}-${pkgver}.tar.gz::https://github.com/ddmoney420/${pkgname}/archive/refs/tags/v${pkgver}.tar.gz")
-sha256sums=('PLACEHOLDER_SHA256')  # Will be updated with actual release
+sha256sums=('efb998c1b2be0fba8f4a01341606e352376e4ac7fb603a14c62db33e017734fc')
 install="${pkgname}.install"
 backup=('.env')
 
