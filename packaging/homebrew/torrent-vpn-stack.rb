@@ -90,10 +90,10 @@ class TorrentVpnStack < Formula
     assert_predicate prefix/"scripts/verify-vpn.sh", :executable?
 
     # Test that docker-compose.yml exists
-    assert_predicate prefix/"docker-compose.yml", :exist?
+    assert_path_exists prefix/"docker-compose.yml"
 
     # Test that .env.example exists
-    assert_predicate prefix/".env.example", :exist?
+    assert_path_exists prefix/".env.example"
 
     # Test that symlinks work
     system bin/"torrent-vpn-setup", "--help"
