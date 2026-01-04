@@ -134,12 +134,12 @@ docker compose up -d
 
 **📖 [Homebrew Installation Guide](packaging/homebrew/README.md)**
 
-#### Windows (Chocolatey) ⏳
+#### Windows (Chocolatey) 🔄
 
-*Ready to submit (requires Windows build)*
+*Submitted - Pending Moderation*
 
 ```powershell
-# Will be available as:
+# Will be available as (pending approval):
 choco install torrent-vpn-stack
 
 # Quick start after installation
@@ -149,7 +149,7 @@ docker compose up -d
 ```
 
 **📖 [Chocolatey Installation Guide](packaging/chocolatey/README.md)**
-**Status**: Package ready, requires Windows machine to build and submit
+**Status**: Submitted to Chocolatey Community Repository - pending moderation (24-48 hours)
 
 #### Arch Linux (AUR) ✅
 
