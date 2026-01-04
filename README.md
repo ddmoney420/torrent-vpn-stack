@@ -838,10 +838,13 @@ DOCKER_DEFAULT_PLATFORM=linux/arm64 docker-compose up -d
 - This stack: Free and open source
 - Docker Desktop: Free (paid for enterprise use)
 
-### Q: Will this work on Linux or Windows?
-**A:** Yes! Minor changes needed:
-- **Linux:** Already works, just adjust `DOWNLOADS_PATH` and `PUID/PGID`
-- **Windows:** Use WSL2 + Docker Desktop, adjust paths to Windows format
+### Q: Does this work on my platform?
+**A:** Yes! Fully cross-platform support:
+- ✅ **Windows 10/11** - Native support with WSL2 or Git Bash (install via Chocolatey)
+- ✅ **Linux** - Ubuntu, Debian, Fedora, Arch, etc. (install via Homebrew or AUR)
+- ✅ **macOS** - Intel and Apple Silicon M1/M2/M3 (install via Homebrew)
+
+See the [Installation](#installation) section for platform-specific package managers and detailed guides in [docs/](docs/).
 
 ### Q: Can I run multiple instances?
 **A:** Yes, but you'll need separate VPN credentials for each:
@@ -903,45 +906,56 @@ See [docs/architecture.md](docs/architecture.md) for detailed architecture diagr
 **High-Level Overview:**
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                      macOS Host                             │
-│  ┌──────────────────────────────────────────────────────┐   │
-│  │              Docker Compose Stack                    │   │
-│  │  ┌────────────────────────────────────────────────┐  │   │
-│  │  │            Gluetun (VPN Gateway)               │  │   │
-│  │  │  ┌──────────────────────────────────────────┐  │  │   │
-│  │  │  │  • WireGuard/OpenVPN client              │  │  │   │
-│  │  │  │  • Firewall (kill switch)                │  │  │   │
-│  │  │  │  • DNS-over-TLS                          │  │  │   │
-│  │  │  │  • IPv6 disabled                         │  │  │   │
-│  │  │  │  • Port forwarding                       │  │  │   │
-│  │  │  └──────────────────────────────────────────┘  │  │   │
-│  │  │                                                 │  │   │
-│  │  │  Exposes ports to host:                        │  │   │
-│  │  │    - 8080 (qBittorrent Web UI)                 │  │   │
-│  │  │    - 6881 (Torrent connections)                │  │   │
-│  │  └────────────────────────────────────────────────┘  │   │
-│  │                          ▲                           │   │
-│  │                          │ network_mode: service     │   │
-│  │                          │                           │   │
-│  │  ┌───────────────────────┴──────────────────────┐   │   │
-│  │  │         qBittorrent (Torrent Client)         │   │   │
-│  │  │  • Shares Gluetun's network namespace        │   │   │
-│  │  │  • All traffic forced through VPN            │   │   │
-│  │  │  • No independent internet access            │   │   │
-│  │  │  • Web UI @ localhost:8080                   │   │   │
-│  │  └──────────────────────────────────────────────┘   │   │
-│  └──────────────────────────────────────────────────────┘   │
-│                          │                                   │
-│                          │ Bind mount                        │
-│                          ▼                                   │
-│              ~/Downloads/torrents/                           │
-│              (Persistent storage)                            │
-└─────────────────────────────────────────────────────────────┘
-                          │
-                          │ VPN Tunnel (Encrypted)
-                          ▼
-                    Internet via VPN
+┌─────────────────────────────────────────────────────────────────────┐
+│            Host System (Windows / Linux / macOS)                    │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │                   Docker Compose Stack                       │   │
+│  │  ┌────────────────────────────────────────────────────────┐  │   │
+│  │  │              Gluetun (VPN Gateway)                     │  │   │
+│  │  │  ┌──────────────────────────────────────────────────┐  │  │   │
+│  │  │  │  • WireGuard/OpenVPN client                      │  │  │   │
+│  │  │  │  • Firewall (kill switch)                        │  │  │   │
+│  │  │  │  • DNS-over-TLS (DoT)                            │  │  │   │
+│  │  │  │  • IPv6 disabled                                 │  │  │   │
+│  │  │  │  • Port forwarding                               │  │  │   │
+│  │  │  │  • Health monitoring                             │  │  │   │
+│  │  │  └──────────────────────────────────────────────────┘  │  │   │
+│  │  │                                                         │  │   │
+│  │  │  Exposes ports to host:                                │  │   │
+│  │  │    - 8080 (qBittorrent Web UI)                         │  │   │
+│  │  │    - 6881 (Torrent connections)                        │  │   │
+│  │  │    - 8000 (Gluetun control - optional)                 │  │   │
+│  │  └────────────────────────────────────────────────────────┘  │   │
+│  │                            ▲                                 │   │
+│  │                            │ network_mode: service:gluetun   │   │
+│  │                            │ (Shares network namespace)      │   │
+│  │  ┌─────────────────────────┴────────────────────────────┐   │   │
+│  │  │           qBittorrent (Torrent Client)               │   │   │
+│  │  │  • Shares Gluetun's network namespace                │   │   │
+│  │  │  • All traffic forced through VPN tunnel             │   │   │
+│  │  │  • No independent internet access (kill switch)      │   │   │
+│  │  │  • Web UI accessible @ http://localhost:8080         │   │   │
+│  │  │  • Runs as unprivileged user (PUID/PGID)             │   │   │
+│  │  └──────────────────────────────────────────────────────┘   │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                            │                                         │
+│                            │ Bind mount to host filesystem           │
+│                            ▼                                         │
+│     Downloads Path (configurable):                                  │
+│       • Windows: C:\Users\<user>\Downloads\torrents                 │
+│       • Linux:   /home/<user>/Downloads/torrents                    │
+│       • macOS:   /Users/<user>/Downloads/torrents                   │
+│                                                                      │
+│     Docker Volumes (persistent config):                             │
+│       • gluetun-config (VPN state)                                  │
+│       • qbittorrent-config (settings & torrents)                    │
+└─────────────────────────────────────────────────────────────────────┘
+                            │
+                            │ Encrypted VPN Tunnel
+                            │ (WireGuard or OpenVPN)
+                            ▼
+                  Internet via VPN Provider
+            (Your real IP is never exposed)
 ```
 
 **Traffic Flow:**
