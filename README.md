@@ -341,7 +341,9 @@ docker-compose up -d
 docker image prune
 ```
 
-### Monitoring
+### Monitoring & Observability
+
+#### Quick Health Checks
 
 **Check VPN Connection:**
 ```bash
@@ -364,6 +366,30 @@ curl -u admin:your_password http://localhost:8080/api/v2/app/version
 ```bash
 curl http://localhost:8000/v1/openvpn/portforwarded
 ```
+
+#### Full Monitoring Stack (Optional)
+
+Enable comprehensive monitoring with Prometheus + Grafana:
+
+```bash
+# Start stack with monitoring enabled
+docker compose --profile monitoring up -d
+```
+
+**Features:**
+- **Grafana Dashboards**: Visual metrics at http://localhost:3000
+  - System: Container CPU, memory, network usage
+  - qBittorrent: Download/upload speeds, torrents, peers, ratio
+  - VPN: Connection status, uptime, throughput
+- **Prometheus**: Metrics collection at http://localhost:9090
+- **30-day retention**: Historical trend analysis
+- **Real-time updates**: Auto-refresh every 10 seconds
+
+**Access:**
+- Grafana: http://localhost:3000 (login: admin/admin)
+- Prometheus: http://localhost:9090
+
+**📖 For detailed setup and dashboard guide, see [docs/monitoring.md](docs/monitoring.md)**
 
 ## Security Notes
 

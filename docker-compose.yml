@@ -125,6 +125,92 @@ services:
     profiles:
       - port-forwarding
 
+  # Prometheus - Metrics Collection
+  # Start with: docker compose --profile monitoring up -d
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./config/prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    networks:
+      - vpn-network
+    profiles:
+      - monitoring
+
+  # Grafana - Metrics Visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    volumes:
+      - ./config/grafana/provisioning:/etc/grafana/provisioning
+      - ./config/grafana/dashboards:/var/lib/grafana/dashboards
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:${GRAFANA_PORT:-3000}
+      - GF_INSTALL_PLUGINS=
+    restart: unless-stopped
+    networks:
+      - vpn-network
+    depends_on:
+      - prometheus
+    profiles:
+      - monitoring
+
+  # qBittorrent Exporter - Torrent Metrics
+  qbittorrent-exporter:
+    image: caseyscarborough/qbittorrent-exporter:latest
+    container_name: qbittorrent-exporter
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+      qbittorrent:
+        condition: service_started
+    environment:
+      - QBITTORRENT_BASE_URL=http://localhost:8080
+      - QBITTORRENT_USERNAME=${QBITTORRENT_USER:-admin}
+      - QBITTORRENT_PASSWORD=${QBITTORRENT_PASS}
+    restart: unless-stopped
+    profiles:
+      - monitoring
+
+  # cAdvisor - Container Resource Metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "${CADVISOR_PORT:-8081}:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /dev/disk:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    privileged: true
+    restart: unless-stopped
+    networks:
+      - vpn-network
+    profiles:
+      - monitoring
+
 networks:
   vpn-network:
     driver: bridge
@@ -133,4 +219,8 @@ volumes:
   gluetun-config:
     driver: local
   qbittorrent-config:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
     driver: local

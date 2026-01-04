@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Monitoring and Observability Stack** (Issue #7)
+  - Added Prometheus for metrics collection and storage (30-day retention)
+  - Added Grafana for metrics visualization and dashboards
+  - Added qBittorrent Exporter for torrent-specific metrics (speeds, peers, ratio)
+  - Added cAdvisor for container resource monitoring (CPU, memory, network)
+  - Three pre-configured Grafana dashboards:
+    - System Dashboard: Container resource usage (CPU, memory, network I/O)
+    - qBittorrent Dashboard: Torrent metrics (speeds, total transferred, ratio)
+    - VPN Dashboard: Gluetun status and uptime
+  - Prometheus configuration with scrape targets for all exporters
+  - Grafana datasource auto-provisioning for Prometheus
+  - Comprehensive monitoring documentation (`docs/monitoring.md`)
+  - Monitoring services use Docker Compose profiles (`--profile monitoring`)
+  - Updated README with monitoring section and quick start guide
+  - Added monitoring configuration variables to `.env.example`
 - **Port Forwarding Automation** (Issue #5)
   - Enabled `gluetun-qbittorrent-port-manager` service via Docker Compose profiles
   - Automatic port synchronization from Gluetun VPN to qBittorrent
