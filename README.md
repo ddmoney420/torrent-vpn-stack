@@ -177,14 +177,35 @@ mkdir -p ~/Downloads/torrents
 
 ### Step 4: Port Forwarding (Optional)
 
-If your VPN supports port forwarding (Mullvad, ProtonVPN, PIA):
+Port forwarding significantly improves torrent performance by allowing incoming peer connections.
+
+**Supported Providers:** Mullvad, ProtonVPN (Plus+), Private Internet Access (PIA)
+
+#### Enable Port Forwarding
+
+Edit `.env`:
 
 ```env
 VPN_PORT_FORWARDING=on
-VPN_PORT_FORWARDING_PROVIDER=protonvpn  # Or your provider
+
+# For ProtonVPN only, also set:
+VPN_PORT_FORWARDING_PROVIDER=protonvpn
+
+# Optional: Adjust sync interval (default: 300 seconds)
+PORT_SYNC_INTERVAL=300
 ```
 
-Then uncomment the `gluetun-qbittorrent-sync` service in `docker-compose.yml` to automatically sync the forwarded port.
+#### Start with Port Forwarding Profile
+
+The port sync helper runs as a Docker Compose profile. Start the stack with:
+
+```bash
+docker compose --profile port-forwarding up -d
+```
+
+The `gluetun-qbittorrent-port-manager` service will automatically sync the forwarded port from Gluetun to qBittorrent whenever it changes.
+
+**📖 For detailed setup, verification, and troubleshooting, see [docs/port-forwarding.md](docs/port-forwarding.md)**
 
 ### Step 5: Start Services
 
@@ -249,10 +270,13 @@ The stack exposes these ports on your Mac:
 | Port | Service | Purpose |
 |------|---------|---------|
 | 8080 | qBittorrent Web UI | Browser access to qBittorrent |
-| 6881 | qBittorrent Connections | Torrent peer connections (TCP/UDP) |
+| 6881 | qBittorrent Connections | Default torrent peer connections (TCP/UDP) |
 | 8000 | Gluetun Control | Health checks and port forwarding info (optional) |
+| *Dynamic* | VPN Port Forwarding | Auto-assigned by VPN provider (if enabled) |
 
 **Note:** All ports are defined on the `gluetun` service because qBittorrent uses Gluetun's network stack (`network_mode: service:gluetun`). This is intentional for the kill switch.
+
+**Port Forwarding:** When enabled, your VPN provider assigns a dynamic port (e.g., 51234) that automatically syncs to qBittorrent. See [docs/port-forwarding.md](docs/port-forwarding.md) for setup.
 
 ### Volume Management
 
@@ -613,9 +637,13 @@ DOCKER_DEFAULT_PLATFORM=linux/arm64 docker-compose up -d
 - VPNs in 14-Eyes countries (if privacy is critical)
 
 ### Q: Do I need port forwarding?
-**A:** Not required, but recommended:
-- **Without:** You can download, but only from peers who have port forwarding (slower)
-- **With:** You can connect to more peers = faster speeds + better seeding
+**A:** Not required, but highly recommended for optimal performance:
+- **Without:** You can download, but only from peers who have port forwarding (limited connectivity)
+- **With:** You become "connectable" — faster speeds, better seeding, healthier swarms
+
+**Supported Providers:** Mullvad, ProtonVPN (Plus+), Private Internet Access (PIA)
+
+**📖 See [docs/port-forwarding.md](docs/port-forwarding.md) for complete setup guide**
 
 ### Q: How much does this cost?
 **A:**

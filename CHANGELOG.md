@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Port Forwarding Automation** (Issue #5)
+  - Enabled `gluetun-qbittorrent-port-manager` service via Docker Compose profiles
+  - Automatic port synchronization from Gluetun VPN to qBittorrent
+  - Added `PORT_SYNC_INTERVAL` configuration variable (default: 300 seconds)
+  - Comprehensive port forwarding documentation (`docs/port-forwarding.md`)
+  - Provider-specific setup guides for Mullvad, ProtonVPN, and Private Internet Access (PIA)
+  - Troubleshooting section for common port forwarding issues
+  - Updated README with port forwarding setup instructions
+  - Enhanced `.env.example` with detailed port forwarding configuration comments
 - GitHub Actions CI/CD pipeline (`.github/workflows/ci.yml`)
   - ShellCheck linting for all bash scripts
   - YAML linting for Docker Compose files and workflows
@@ -29,6 +38,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Port sync service now uses Docker Compose profiles (`--profile port-forwarding`) instead of manual uncommenting
+- Updated port configuration documentation to include dynamic VPN-assigned ports
 - All shell scripts now pass ShellCheck linting with zero warnings
 - Documentation now passes markdownlint validation
 - Updated CI workflow to use `docker compose` instead of `docker-compose`
