@@ -9,6 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Automated Backup Solution** (Issue #9)
+  - Added `scripts/backup.sh` for manual and automated backups
+  - Added `scripts/restore.sh` for interactive and command-line restore
+  - Added `scripts/setup-backup-automation.sh` for macOS launchd integration
+  - Added `scripts/remove-backup-automation.sh` to uninstall automation
+  - Added launchd plist template for scheduled backups
+  - Backup features:
+    - Backs up Docker volumes (qBittorrent, Gluetun, optionally monitoring data)
+    - Compressed tar.gz archives with timestamps
+    - Automatic backup rotation based on retention policy (default: 7 days)
+    - Dry-run mode for testing
+    - Verbose logging
+  - Restore features:
+    - Interactive backup selection
+    - Safety backup before restore
+    - Automatic container stop/start
+    - Confirmation prompts
+  - Automation features (macOS):
+    - Daily scheduled backups via launchd
+    - Configurable schedule (default: 3 AM)
+    - Automatic log rotation
+  - Comprehensive backup documentation (`docs/backups.md`)
+  - Updated README with backups section
+  - Added backup configuration variables to `.env.example`
 - **Monitoring and Observability Stack** (Issue #7)
   - Added Prometheus for metrics collection and storage (30-day retention)
   - Added Grafana for metrics visualization and dashboards

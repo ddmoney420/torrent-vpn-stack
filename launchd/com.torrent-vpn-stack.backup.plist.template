@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Job Label (unique identifier) -->
+    <key>Label</key>
+    <string>com.torrent-vpn-stack.backup</string>
+
+    <!-- Description -->
+    <key>Description</key>
+    <string>Automated backup for Torrent VPN Stack Docker volumes</string>
+
+    <!-- Program to run -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>__SCRIPT_PATH__</string>
+    </array>
+
+    <!-- Schedule: Daily at specified hour (default: 3 AM) -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>__BACKUP_HOUR__</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- Standard output log -->
+    <key>StandardOutPath</key>
+    <string>__LOG_DIR__/torrent-vpn-stack-backup.log</string>
+
+    <!-- Standard error log -->
+    <key>StandardErrorPath</key>
+    <string>__LOG_DIR__/torrent-vpn-stack-backup-error.log</string>
+
+    <!-- Run on load (optional - for testing) -->
+    <key>RunAtLoad</key>
+    <false/>
+
+    <!-- Working directory -->
+    <key>WorkingDirectory</key>
+    <string>__PROJECT_DIR__</string>
+
+    <!-- Environment variables -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>HOME</key>
+        <string>__HOME_DIR__</string>
+    </dict>
+
+    <!-- Process Type -->
+    <key>ProcessType</key>
+    <string>Background</string>
+
+    <!-- Nice level (lower priority to not interfere with other tasks) -->
+    <key>Nice</key>
+    <integer>10</integer>
+
+    <!-- Throttle interval (minimum seconds between runs) -->
+    <key>ThrottleInterval</key>
+    <integer>3600</integer>
+</dict>
+</plist>
