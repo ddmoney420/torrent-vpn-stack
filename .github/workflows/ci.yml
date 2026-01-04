@@ -38,7 +38,7 @@ jobs:
         run: pip install yamllint
 
       - name: Run yamllint
-        run: yamllint -d "{extends: default, rules: {line-length: {max: 120}, comments: {min-spaces-from-content: 1}}}" docker-compose.yml .github/workflows/*.yml
+        run: yamllint docker-compose.yml .github/workflows/
 
   docker-compose-validate:
     name: Docker Compose Validation
