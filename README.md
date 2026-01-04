@@ -116,10 +116,10 @@ Choose your preferred installation method:
 
 Install with a single command using your platform's package manager:
 
-#### macOS / Linux (Homebrew)
+#### macOS / Linux (Homebrew) ✅
 
 ```bash
-# Option 1: Install from tap (once published)
+# Option 1: Install from tap
 brew tap ddmoney420/torrent-vpn-stack
 brew install torrent-vpn-stack
 
