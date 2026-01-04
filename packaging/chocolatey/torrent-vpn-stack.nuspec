@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>torrent-vpn-stack</id>
+    <version>1.0.0</version>
+    <title>Torrent VPN Stack</title>
+    <authors>ddmoney420</authors>
+    <owners>ddmoney420</owners>
+    <licenseUrl>https://github.com/ddmoney420/torrent-vpn-stack/blob/main/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/ddmoney420/torrent-vpn-stack</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+Cross-platform Docker Compose stack for secure torrenting via VPN using qBittorrent and Gluetun.
+
+## Features
+- Complete Docker Compose stack with VPN kill-switch
+- Cross-platform support (Windows, macOS, Linux)
+- Interactive setup wizard
+- Automated backups and monitoring
+- Support for multiple VPN providers (Mullvad, ProtonVPN, NordVPN, etc.)
+- Port forwarding support for improved connectivity
+
+## Requirements
+- Docker Desktop for Windows
+- VPN subscription (Mullvad, ProtonVPN, PIA, or others)
+- 8 GB RAM minimum (16 GB recommended)
+
+## Quick Start
+After installation:
+1. Run: torrent-vpn-setup
+2. Start: docker compose up -d
+3. Access qBittorrent at http://localhost:8080
+    </description>
+    <summary>Secure torrenting stack with VPN, qBittorrent, and Gluetun</summary>
+    <releaseNotes>https://github.com/ddmoney420/torrent-vpn-stack/blob/main/CHANGELOG.md</releaseNotes>
+    <copyright>Copyright 2025</copyright>
+    <tags>torrent vpn docker qbittorrent gluetun security privacy</tags>
+    <projectSourceUrl>https://github.com/ddmoney420/torrent-vpn-stack</projectSourceUrl>
+    <packageSourceUrl>https://github.com/ddmoney420/torrent-vpn-stack/tree/main/packaging/chocolatey</packageSourceUrl>
+    <docsUrl>https://github.com/ddmoney420/torrent-vpn-stack/tree/main/docs</docsUrl>
+    <bugTrackerUrl>https://github.com/ddmoney420/torrent-vpn-stack/issues</bugTrackerUrl>
+
+    <dependencies>
+      <dependency id="docker-desktop" version="4.0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
