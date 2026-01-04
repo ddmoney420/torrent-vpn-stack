@@ -8,15 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - GitHub Actions CI/CD pipeline (`.github/workflows/ci.yml`)
   - ShellCheck linting for all bash scripts
   - YAML linting for Docker Compose files and workflows
   - Docker Compose configuration validation
   - Markdown linting for documentation files
 - Markdownlint configuration (`.markdownlint.json`)
+- Yamllint configuration (`.yamllint`)
 - CI status badge in README
 
 ### Fixed
+
 - ShellCheck warnings in `scripts/setup.sh`:
   - Added shellcheck directive for unused RED color variable
   - Added `-r` flag to all `read` commands to properly handle backslashes
@@ -25,8 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Quoted URL with `${WEBUI_PORT}` variable expansion
 
 ### Changed
+
 - All shell scripts now pass ShellCheck linting with zero warnings
 - Documentation now passes markdownlint validation
+- Updated CI workflow to use `docker compose` instead of `docker-compose`
 
 ## [1.0.0] - 2026-01-03
 
