@@ -136,7 +136,7 @@ docker compose up -d
 
 #### Windows (Chocolatey) ⏳
 
-*Pending moderator approval (24-48 hours)*
+*Ready to submit (requires Windows build)*
 
 ```powershell
 # Will be available as:
@@ -149,16 +149,15 @@ docker compose up -d
 ```
 
 **📖 [Chocolatey Installation Guide](packaging/chocolatey/README.md)**
-**Status**: Submitted, awaiting approval
+**Status**: Package ready, requires Windows machine to build and submit
 
-#### Arch Linux (AUR) ⏳
-
-*Ready to publish (requires SSH setup)*
+#### Arch Linux (AUR) ✅
 
 ```bash
-# Will be available as:
+# Using yay
 yay -S torrent-vpn-stack
-# OR
+
+# Using paru
 paru -S torrent-vpn-stack
 
 # Quick start after installation
@@ -168,7 +167,6 @@ docker compose up -d
 ```
 
 **📖 [AUR Installation Guide](packaging/aur/README.md)**
-**Status**: Package ready, pending SSH push
 
 ### Manual Installation (Git Clone)
 
