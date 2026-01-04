@@ -9,6 +9,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Cross-Platform Compatibility (Windows, Linux, macOS)** (Issue #13)
+  - **Full Windows Support:**
+    - Added Windows PowerShell backup automation scripts (`setup-backup-automation.ps1`, `remove-backup-automation.ps1`)
+    - Windows Task Scheduler integration for automated backups
+    - Support for both WSL 2 and Git Bash environments
+    - Comprehensive Windows installation guide (`docs/install-windows.md`)
+  - **Full Linux Support:**
+    - Added Linux backup automation scripts (`setup-backup-automation-linux.sh`, `remove-backup-automation-linux.sh`)
+    - systemd timer support (preferred method)
+    - cron fallback support
+    - Comprehensive Linux installation guide (`docs/install-linux.md`)
+    - Support for Ubuntu, Debian, Fedora, Arch Linux, and derivatives
+  - **Enhanced macOS Support:**
+    - Maintained existing launchd automation
+    - Updated macOS installation guide (`docs/install-macos.md`)
+    - Full Apple Silicon (M1/M2/M3) and Intel support
+  - **Platform Detection:**
+    - Added `scripts/detect-platform.sh` utility
+    - Auto-detects Windows (Git Bash/WSL), Linux, macOS
+    - Platform-specific path handling (XDG Base Directory spec on Linux, Library on macOS, AppData on Windows)
+    - Cross-platform network detection (local IP and subnet)
+  - **Cross-Platform Scripts:**
+    - Updated `scripts/setup.sh` to use platform detection
+    - Cross-platform sed compatibility (macOS vs Linux/Windows)
+    - Network detection works on all platforms
+  - **Public Repository Preparation:**
+    - Added `LICENSE` (MIT License)
+    - Added `CONTRIBUTING.md` with contribution guidelines
+    - Added `SECURITY.md` with security policy and responsible disclosure process
+    - Added `CODE_OF_CONDUCT.md` for community standards
+    - Added GitHub issue templates (bug report, feature request, question)
+    - Added GitHub pull request template
+    - Updated README with platform badges, cross-platform information, and contributing section
+  - **CI/CD Enhancements:**
+    - Added cross-platform testing in GitHub Actions
+    - Matrix builds on Ubuntu, Windows, macOS
+    - Platform detection validation
+    - Script syntax validation on all platforms
+  - **Documentation:**
+    - Three comprehensive platform-specific installation guides
+    - Platform-specific troubleshooting sections
+    - Backup automation instructions for each platform
+    - Firewall configuration guides (UFW, firewalld, Windows Firewall)
+
+### Changed
+
+- README now reflects cross-platform support (was macOS-only)
+- Setup wizard now auto-detects platform and uses appropriate commands
+- All scripts now compatible with Windows, Linux, and macOS
+
 - **Multi-VPN Provider Testing and Performance Benchmarking** (Issue #11)
   - Added provider configuration examples (`examples/providers/`):
     - Mullvad (port forwarding, WireGuard)

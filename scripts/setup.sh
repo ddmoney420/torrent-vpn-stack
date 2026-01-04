@@ -19,9 +19,15 @@ PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 ENV_FILE="$PROJECT_ROOT/.env"
 ENV_EXAMPLE="$PROJECT_ROOT/.env.example"
 
+# Load platform detection
+# shellcheck source=scripts/detect-platform.sh
+source "${SCRIPT_DIR}/detect-platform.sh"
+
 echo -e "${BLUE}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${BLUE}║     Torrent VPN Stack - Interactive Setup Wizard          ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════════════════════════╝${NC}"
+echo ""
+echo -e "${GREEN}Detected platform: ${PLATFORM_NAME}${NC}"
 echo ""
 
 # Check if .env already exists
@@ -47,11 +53,11 @@ echo ""
 update_env() {
     local key=$1
     local value=$2
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS
+    if [[ "${PLATFORM}" == "macos" ]]; then
+        # macOS requires empty string after -i
         sed -i '' "s|^${key}=.*|${key}=${value}|" "$ENV_FILE"
     else
-        # Linux
+        # Linux and Windows (Git Bash)
         sed -i "s|^${key}=.*|${key}=${value}|" "$ENV_FILE"
     fi
 }
@@ -132,15 +138,9 @@ echo -e "${BLUE}Step 3: Network Configuration${NC}"
 echo -e "${BLUE}═══════════════════════════════════════════════════════════${NC}"
 echo ""
 
-# Try to detect local subnet
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS
-    LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || echo "192.168.1.100")
-    DETECTED_SUBNET=$(echo "$LOCAL_IP" | awk -F. '{print $1"."$2"."$3".0/24"}')
-else
-    # Linux
-    DETECTED_SUBNET=$(ip route | grep default | awk '{print $3}' | awk -F. '{print $1"."$2"."$3".0/24"}')
-fi
+# Try to detect local subnet using platform detection utility
+LOCAL_IP=$(get_local_ip)
+DETECTED_SUBNET=$(get_local_subnet "${LOCAL_IP}")
 
 echo "Your local subnet allows LAN access to qBittorrent Web UI."
 echo "Detected subnet: ${DETECTED_SUBNET}"

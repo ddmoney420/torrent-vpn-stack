@@ -1,10 +1,14 @@
 # Torrent VPN Stack
 
 [![CI](https://github.com/ddmoney420/torrent-vpn-stack/workflows/CI/badge.svg)](https://github.com/ddmoney420/torrent-vpn-stack/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)](https://github.com/ddmoney420/torrent-vpn-stack)
 
-> **Containerized torrent downloader behind VPN using Gluetun + qBittorrent for macOS (Apple Silicon compatible)**
+> **Cross-platform containerized torrent downloader behind VPN using Gluetun + qBittorrent**
 
 A production-ready, security-hardened Docker Compose stack that routes all torrent traffic through a VPN with leak protection, kill switch, and web UI access from your local network.
+
+**Supports Windows 10/11, Linux, and macOS (including Apple Silicon M1/M2/M3).**
 
 ## Features
 
@@ -25,9 +29,10 @@ A production-ready, security-hardened Docker Compose stack that routes all torre
 - ✅ **Verification Tools** - Scripts to check VPN connection and detect leaks
 
 ### Compatibility
-- ✅ **macOS Apple Silicon** - Tested on M1/M2/M3 Macs
+- ✅ **Cross-Platform** - Windows 10/11, Linux (Ubuntu, Debian, Fedora, Arch), macOS (Intel & Apple Silicon M1/M2/M3)
 - ✅ **Multiple VPN Providers** - Supports Mullvad, NordVPN, ProtonVPN, Surfshark, PIA, and [many more](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers)
 - ✅ **WireGuard & OpenVPN** - Modern WireGuard (recommended) or classic OpenVPN
+- ✅ **Automated Backups** - Native automation for all platforms (Task Scheduler, systemd/cron, launchd)
 
 ## Table of Contents
 
@@ -45,16 +50,24 @@ A production-ready, security-hardened Docker Compose stack that routes all torre
 ## Prerequisites
 
 ### Required
-- **macOS** (Apple Silicon M1/M2/M3 or Intel)
-- **Docker Desktop** 4.0+ ([Download](https://www.docker.com/products/docker-desktop/))
-- **Docker Compose** 2.0+ (included with Docker Desktop)
-- **VPN Subscription** with one of the [supported providers](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers)
-- **VPN Credentials** (WireGuard config or OpenVPN username/password)
+- **Operating System:** Windows 10/11, Linux (Ubuntu 20.04+, Debian 11+, Fedora 35+, Arch), or macOS 11+
+- **Docker:** Docker Desktop (Windows/macOS) or Docker Engine (Linux)
+- **Docker Compose:** v2.0+ (included with Docker Desktop)
+- **VPN Subscription:** One of the [supported providers](https://github.com/qdm12/gluetun-wiki/tree/main/setup/providers)
+- **VPN Credentials:** WireGuard config or OpenVPN username/password
 
 ### Recommended
-- At least 4GB RAM allocated to Docker
-- 20GB free disk space (more for downloads)
+- 8 GB RAM (4 GB minimum)
+- 20 GB free disk space (more for downloads)
 - Stable internet connection
+
+### Platform-Specific Installation Guides
+
+Choose your platform for detailed installation instructions:
+
+- **[Windows Installation Guide](docs/install-windows.md)** - WSL 2, Git Bash, PowerShell automation
+- **[Linux Installation Guide](docs/install-linux.md)** - Ubuntu, Debian, Fedora, Arch, systemd/cron
+- **[macOS Installation Guide](docs/install-macos.md)** - Intel and Apple Silicon, launchd automation
 
 ## VPN Provider Selection
 
@@ -886,6 +899,25 @@ MIT License - See LICENSE file for details
 ## Disclaimer
 
 This tool is provided for educational and legitimate use only. The authors are not responsible for any misuse or illegal activity. Always comply with copyright laws and terms of service of your VPN provider and ISP.
+
+## Contributing
+
+Contributions are welcome! This is an open source project under the MIT License.
+
+- 🤝 [Contributing Guide](CONTRIBUTING.md) - How to contribute code, documentation, or bug reports
+- 🔒 [Security Policy](SECURITY.md) - Reporting vulnerabilities responsibly
+- 📜 [Code of Conduct](CODE_OF_CONDUCT.md) - Community standards
+- 📝 [MIT License](LICENSE) - Free and open source
+
+### Ways to Contribute
+
+- Report bugs or suggest features via [GitHub Issues](https://github.com/ddmoney420/torrent-vpn-stack/issues)
+- Improve documentation (especially platform-specific guides)
+- Test on different platforms and report compatibility
+- Submit pull requests for bug fixes or enhancements
+- Help answer questions in [Discussions](https://github.com/ddmoney420/torrent-vpn-stack/discussions)
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## Support
 
