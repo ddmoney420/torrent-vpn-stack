@@ -31,6 +31,9 @@ Temporary Items
 data/
 downloads/
 config/
+# Exception: Allow monitoring config files (not sensitive)
+!config/prometheus/
+!config/grafana/
 
 # Logs
 *.log
