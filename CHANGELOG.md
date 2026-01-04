@@ -7,7 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-01-04
+
 ### Added
+
+- **Package Manager Support (Homebrew, Chocolatey, AUR)** (Issue #16)
+  - **Homebrew (macOS/Linux):**
+    - Complete Homebrew formula (`packaging/homebrew/torrent-vpn-stack.rb`)
+    - Installs to `$(brew --prefix)/opt/torrent-vpn-stack`
+    - Creates system-wide command symlinks (torrent-vpn-*)
+    - Platform-specific automation symlinks (macOS launchd vs Linux systemd)
+    - Tap repository support: `brew install ddmoney420/torrent-vpn-stack/torrent-vpn-stack`
+    - Comprehensive installation, testing, and publishing documentation
+  - **Chocolatey (Windows):**
+    - NuSpec package manifest (`packaging/chocolatey/torrent-vpn-stack.nuspec`)
+    - PowerShell install/uninstall scripts with safety checks
+    - Wrapper batch files for Git Bash integration
+    - Installs to `C:\ProgramData\torrent-vpn-stack`
+    - Automated PATH setup for system-wide commands
+    - Complete publishing guide for Chocolatey Community Repository
+  - **AUR (Arch Linux):**
+    - PKGBUILD for Arch package creation (`packaging/aur/PKGBUILD`)
+    - .SRCINFO metadata for AUR submission
+    - Post-install/upgrade/remove hooks with helpful messages
+    - Installs to `/usr/share/torrent-vpn-stack`
+    - systemd/cron automation support
+    - Complete AUR publishing workflow documentation
+  - **Available Commands (All Platforms):**
+    - `torrent-vpn-setup` - Interactive configuration wizard
+    - `torrent-vpn-verify` - Verify VPN connection
+    - `torrent-vpn-check-leaks` - Check for IP/DNS leaks
+    - `torrent-vpn-backup` - Backup Docker volumes
+    - `torrent-vpn-restore` - Restore from backup
+    - `torrent-vpn-benchmark` - Benchmark VPN performance
+    - `torrent-vpn-setup-automation` - Setup automated backups
+    - `torrent-vpn-remove-automation` - Remove automated backups
+  - **Documentation:**
+    - Added Installation section to README.md with package manager quick start
+    - Platform-specific package documentation in each `packaging/*/README.md`
+    - Publishing guides for maintainers
+    - Updated Table of Contents
 
 - **Cross-Platform Compatibility (Windows, Linux, macOS)** (Issue #13)
   - **Full Windows Support:**
@@ -156,12 +195,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All shell scripts now pass ShellCheck linting with zero warnings
 - Documentation now passes markdownlint validation
 - Updated CI workflow to use `docker compose` instead of `docker-compose`
+- Updated architecture diagram to reflect cross-platform support (not macOS-specific)
+- Updated FAQ to reflect full cross-platform compatibility
 
-## [1.0.0] - 2026-01-03
+#### Initial Release Features
 
-### Added
-
-#### Core Infrastructure
 - Docker Compose stack with Gluetun VPN gateway and qBittorrent torrent client
 - Kill switch implementation via Docker network namespace sharing (`network_mode: service:gluetun`)
 - DNS-over-TLS (DoT) configuration for leak protection
