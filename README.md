@@ -1,5 +1,7 @@
 # Torrent VPN Stack
 
+[![CI](https://github.com/ddmoney420/torrent-vpn-stack/workflows/CI/badge.svg)](https://github.com/ddmoney420/torrent-vpn-stack/actions)
+
 > **Containerized torrent downloader behind VPN using Gluetun + qBittorrent for macOS (Apple Silicon compatible)**
 
 A production-ready, security-hardened Docker Compose stack that routes all torrent traffic through a VPN with leak protection, kill switch, and web UI access from your local network.
