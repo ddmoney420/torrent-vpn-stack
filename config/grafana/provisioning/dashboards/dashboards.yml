@@ -1,0 +1,16 @@
+# Grafana Dashboard Provisioning - Auto-load dashboards
+# This file tells Grafana to load dashboards from /var/lib/grafana/dashboards
+
+apiVersion: 1
+
+providers:
+  - name: 'Torrent VPN Stack'
+    orgId: 1
+    folder: 'Torrent VPN Monitoring'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false
