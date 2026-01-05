@@ -335,6 +335,36 @@ To access qBittorrent from other devices on your network:
    - **Settings** → **Resources** → **Network**
    - Try changing subnet if conflicts exist
 
+5. **"Unauthorized" error instead of login page:**
+   ```bash
+   # Stop qBittorrent
+   docker compose stop qbittorrent
+
+   # Disable host header validation
+   docker run --rm -v torrent-vpn-stack_qbittorrent-config:/config alpine sh -c '
+   echo "WebUI\HostHeaderValidation=false" >> /config/qBittorrent/qBittorrent.conf'
+
+   # Restart
+   docker compose start qbittorrent
+   ```
+
+### Downloads Path Error
+
+**Error:** Volume mount fails with "path is not shared from the host"
+
+**Solution:** Use absolute paths in `.env` (tilde `~` expansion may fail):
+```bash
+# Wrong:
+DOWNLOADS_PATH=~/Downloads/torrents
+
+# Correct:
+DOWNLOADS_PATH=/Users/yourusername/Downloads/torrents
+```
+
+Also ensure the path is shared in Docker Desktop:
+- **Settings** → **Resources** → **File Sharing**
+- Add `/Users/yourusername/Downloads` if not listed
+
 ### Port Forwarding Not Working
 
 **Error:** No forwarded port assigned

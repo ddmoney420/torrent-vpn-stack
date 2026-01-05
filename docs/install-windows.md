@@ -322,6 +322,35 @@ chmod +x scripts/*.sh
    docker compose up -d
    ```
 
+4. **"Unauthorized" error instead of login page:**
+   ```powershell
+   # Stop qBittorrent
+   docker compose stop qbittorrent
+
+   # Disable host header validation
+   docker run --rm -v torrent-vpn-stack_qbittorrent-config:/config alpine sh -c "echo 'WebUI\HostHeaderValidation=false' >> /config/qBittorrent/qBittorrent.conf"
+
+   # Restart
+   docker compose start qbittorrent
+   ```
+
+### Downloads Path Error
+
+**Error:** Volume mount fails or "path not found"
+
+**Solution:** Use Windows-style paths in `.env`:
+```bash
+# Use forward slashes, not backslashes:
+DOWNLOADS_PATH=C:/Users/yourusername/Downloads/torrents
+
+# NOT this:
+DOWNLOADS_PATH=C:\Users\yourusername\Downloads\torrents
+```
+
+Also ensure the drive is shared in Docker Desktop:
+- **Settings** → **Resources** → **File Sharing**
+- Add `C:\Users\yourusername\Downloads` if not listed
+
 ### Port Forwarding Not Working
 
 **Error:** No forwarded port assigned

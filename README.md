@@ -148,6 +148,25 @@ Choose your platform for detailed installation instructions:
 
 **🔧 Provider examples:** See `examples/providers/` for ready-to-use configurations
 
+### Custom/Unsupported VPN Providers
+
+If your VPN provider is not natively supported by Gluetun, you can use custom WireGuard mode:
+
+```bash
+# In .env, use:
+VPN_SERVICE_PROVIDER=custom
+VPN_TYPE=wireguard
+
+# Required fields from your provider's WireGuard config:
+WIREGUARD_PRIVATE_KEY=<from [Interface] PrivateKey>
+WIREGUARD_ADDRESSES=<from [Interface] Address>
+WIREGUARD_PUBLIC_KEY=<from [Peer] PublicKey>
+WIREGUARD_ENDPOINT_IP=<from [Peer] Endpoint, IP only>
+WIREGUARD_ENDPOINT_PORT=<from [Peer] Endpoint, port only>
+```
+
+**📄 Full example:** See `examples/providers/custom.env.example`
+
 ## Installation
 
 Choose your preferred installation method:
@@ -724,6 +743,31 @@ chmod 600 .env  # Only you can read/write
    docker run --rm alpine wget -O- https://cloudflare.com
    ```
 
+### Custom WireGuard Provider Issues
+
+**Symptoms:** Using `VPN_SERVICE_PROVIDER=custom` but VPN won't connect
+
+**Solutions:**
+1. **"endpoint IP is not set" error:**
+   ```env
+   # All fields are REQUIRED for custom provider:
+   WIREGUARD_ENDPOINT_IP=1.2.3.4
+   WIREGUARD_ENDPOINT_PORT=51820
+   ```
+
+2. **"private key is not valid" error:**
+   - Check for copy/paste errors (extra spaces, missing characters)
+   - Ensure the full key is copied (usually ends with `=`)
+
+3. **Connection timeout (no internet after connect):**
+   - Verify `WIREGUARD_ADDRESSES` matches your provider's config exactly
+   - Verify `WIREGUARD_PUBLIC_KEY` is the server's public key (from `[Peer]` section)
+   - Test endpoint is reachable: `nc -vz -u <endpoint_ip> 51820`
+
+4. **"endpoint port is set" error with built-in provider:**
+   - Remove or leave empty: `WIREGUARD_ENDPOINT_PORT=`
+   - Built-in providers auto-detect the port
+
 ### qBittorrent Shows "Connection Refused"
 
 **Symptoms:** Can't access http://localhost:8080 or qBittorrent won't start
@@ -744,6 +788,33 @@ chmod 600 .env  # Only you can read/write
 3. **Check container logs:**
    ```bash
    docker-compose logs qbittorrent | grep -i error
+   ```
+
+### qBittorrent Shows "Unauthorized" (No Login Page)
+
+**Symptoms:** Accessing the Web UI shows "Unauthorized" instead of a login page
+
+**Solutions:**
+1. **Disable host header validation** (required for Docker):
+   ```bash
+   # Stop qBittorrent
+   docker-compose stop qbittorrent
+
+   # Edit config (find your volume path)
+   docker run --rm -v torrent-vpn-stack_qbittorrent-config:/config alpine sh -c '
+   cat >> /config/qBittorrent/qBittorrent.conf << EOF
+   WebUI\HostHeaderValidation=false
+   WebUI\CSRFProtection=false
+   WebUI\LocalHostAuth=false
+   EOF'
+
+   # Restart
+   docker-compose start qbittorrent
+   ```
+
+2. **Check the temporary password** (first run only):
+   ```bash
+   docker-compose logs qbittorrent | grep -i password
    ```
 
 ### Torrents Not Connecting / No Upload/Download
