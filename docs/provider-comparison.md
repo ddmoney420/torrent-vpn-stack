@@ -187,7 +187,7 @@
 
 ## Port Forwarding Impact
 
-### With Port Forwarding (Mullvad, ProtonVPN Plus, PIA)
+### With Port Forwarding (ProtonVPN Plus, PIA)
 - ✅ Connect to ALL peers in swarm
 - ✅ Better download speeds
 - ✅ Much better upload/seeding performance

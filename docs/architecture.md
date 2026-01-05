@@ -626,7 +626,7 @@ docker exec qbittorrent wget -qO- https://api.ipify.org
 
 ## Port Forwarding Architecture
 
-Some VPN providers (Mullvad, ProtonVPN, PIA) support dynamic port forwarding, which improves torrent connectivity.
+Some VPN providers (ProtonVPN, PIA) support dynamic port forwarding, which improves torrent connectivity. Note: Mullvad discontinued port forwarding in July 2023.
 
 ### Port Forwarding Flow
 

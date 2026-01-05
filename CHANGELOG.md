@@ -113,7 +113,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Multi-VPN Provider Testing and Performance Benchmarking** (Issue #11)
   - Added provider configuration examples (`examples/providers/`):
-    - Mullvad (port forwarding, WireGuard)
+    - Mullvad (WireGuard; note: port forwarding discontinued July 2023)
     - ProtonVPN (port forwarding on Plus plans)
     - NordVPN (no port forwarding)
   - Added VPN performance benchmark script (`scripts/benchmark-vpn.sh`):

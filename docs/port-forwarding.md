@@ -66,8 +66,8 @@ Port forwarding allows incoming connections to reach your torrent client through
 Before enabling port forwarding:
 
 1. **VPN Provider Support**: Verify your provider supports port forwarding
-   - ✅ Supported: Mullvad, ProtonVPN, Private Internet Access (PIA)
-   - ❌ Not Supported: NordVPN, Surfshark, ExpressVPN
+   - ✅ Supported: ProtonVPN, Private Internet Access (PIA)
+   - ❌ Not Supported: Mullvad (discontinued July 2023), NordVPN, Surfshark, ExpressVPN
    - See [Gluetun's port forwarding wiki](https://github.com/qdm12/gluetun-wiki/blob/main/setup/advanced/vpn-port-forwarding.md) for full list
 
 2. **Active VPN Account**: Must have an active subscription with a supported provider
@@ -80,11 +80,11 @@ Before enabling port forwarding:
 
 ## Supported VPN Providers
 
-### Mullvad
-- **Port Forwarding**: Automatic (no additional configuration)
-- **Protocol**: WireGuard only (OpenVPN not supported for port forwarding)
-- **Cost**: Free (included with subscription)
-- **Port Type**: Dynamic (changes when you reconnect)
+### Mullvad (No Longer Supported)
+- **Port Forwarding**: ❌ **Discontinued July 2023**
+- Mullvad removed port forwarding citing abuse concerns
+- Still works for torrenting, but without port forwarding benefits
+- Consider ProtonVPN or PIA if port forwarding is important
 
 ### ProtonVPN
 - **Port Forwarding**: Requires Plus or Visionary plan
@@ -155,11 +155,14 @@ Expected output:
 
 ## Provider-Specific Setup
 
-### Mullvad
+### Mullvad (Port Forwarding Discontinued)
 
-Mullvad requires WireGuard and provides automatic port forwarding.
+> **⚠️ Important:** Mullvad discontinued port forwarding in July 2023.
+> If you need port forwarding, consider ProtonVPN or PIA instead.
 
-#### Configuration
+Mullvad still works for torrenting, but without port forwarding you will have reduced connectivity (fewer peers, slower seeding).
+
+#### Configuration (without port forwarding)
 
 ```bash
 # .env file
@@ -170,37 +173,9 @@ VPN_TYPE=wireguard
 WIREGUARD_PRIVATE_KEY=your_private_key_here
 WIREGUARD_ADDRESSES=10.2.0.2/32
 
-# Enable port forwarding
-VPN_PORT_FORWARDING=on
+# Port forwarding is NOT available with Mullvad
+VPN_PORT_FORWARDING=off
 ```
-
-#### Verification
-
-```bash
-# Start stack
-docker compose --profile port-forwarding up -d
-
-# Wait 30 seconds for VPN connection
-sleep 30
-
-# Check for forwarded port
-docker logs gluetun 2>&1 | grep "port forwarded"
-```
-
-Expected log output:
-```
-[INFO] port forwarded is 51234
-```
-
-#### Troubleshooting Mullvad
-
-- **Issue**: No port forwarded
-  - **Cause**: Not all Mullvad servers support port forwarding
-  - **Fix**: Try different server or leave `SERVER_HOSTNAMES` empty for auto-selection
-
-- **Issue**: Port changes frequently
-  - **Cause**: Normal behavior when reconnecting to VPN
-  - **Fix**: Port sync helper will auto-update qBittorrent
 
 ---
 
@@ -426,17 +401,14 @@ grep VPN_SERVICE_PROVIDER .env
 **Solutions**:
 
 1. **Verify provider supports port forwarding**:
-   - ✅ Supported: Mullvad, ProtonVPN (Plus+), PIA
-   - ❌ Not supported: NordVPN, Surfshark, ExpressVPN
+   - ✅ Supported: ProtonVPN (Plus+), PIA
+   - ❌ Not supported: Mullvad (discontinued July 2023), NordVPN, Surfshark, ExpressVPN
 
 2. **For ProtonVPN**:
    ```bash
    # Add to .env:
    VPN_PORT_FORWARDING_PROVIDER=protonvpn
    ```
-
-3. **For Mullvad**:
-   - Ensure `VPN_TYPE=wireguard` (OpenVPN not supported)
 
 ---
 

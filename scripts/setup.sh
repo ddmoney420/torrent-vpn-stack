@@ -220,7 +220,7 @@ echo -e "${BLUE}═════════════════════�
 echo ""
 
 echo "Port forwarding improves torrent speeds and connectivity."
-echo "Only some VPN providers support it (Mullvad, ProtonVPN, PIA)."
+echo "Only some VPN providers support it (ProtonVPN, PIA). Note: Mullvad discontinued port forwarding in July 2023."
 echo ""
 
 read -p "Enable port forwarding? (y/N): " -n 1 -r

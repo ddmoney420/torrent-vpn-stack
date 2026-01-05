@@ -94,7 +94,7 @@ Follow the prompts to configure your VPN provider and preferences.
 # Basic stack (VPN + qBittorrent)
 docker compose up -d
 
-# With port forwarding (Mullvad, ProtonVPN Plus, PIA)
+# With port forwarding (ProtonVPN Plus, PIA)
 docker compose --profile port-forwarding up -d
 
 # With monitoring
@@ -357,8 +357,8 @@ Also ensure the drive is shared in Docker Desktop:
 
 **Solutions:**
 1. Verify your VPN provider supports port forwarding:
-   - ✅ Mullvad, ProtonVPN Plus, PIA
-   - ❌ NordVPN, Surfshark, ExpressVPN
+   - ✅ ProtonVPN Plus, PIA
+   - ❌ Mullvad (discontinued July 2023), NordVPN, Surfshark, ExpressVPN
 
 2. Enable port forwarding profile:
    ```bash

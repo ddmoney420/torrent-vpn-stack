@@ -127,7 +127,6 @@ Choose your platform for detailed installation instructions:
 
 | Provider | Speed | Privacy | Price/Month | Notes |
 |----------|-------|---------|-------------|-------|
-| **Mullvad** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $5.50 | Best overall, port forwarding on all servers |
 | **ProtonVPN Plus** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $4.99+ | Swiss privacy, port forwarding on Plus+ plans |
 | **Private Internet Access** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | $2.19+ | Budget-friendly, port forwarding supported |
 
@@ -135,6 +134,7 @@ Choose your platform for detailed installation instructions:
 
 | Provider | Why Not Recommended |
 |----------|---------------------|
+| **Mullvad** | Port forwarding discontinued July 2023, excellent privacy but limited torrent performance |
 | **NordVPN** | No port forwarding = 60-70% fewer peers, poor seeding |
 | **Surfshark** | No port forwarding, limited torrent performance |
 | **ExpressVPN** | No port forwarding, expensive, no WireGuard |
@@ -143,10 +143,10 @@ Choose your platform for detailed installation instructions:
 
 ### Quick Comparison
 
-- **Best Performance:** Mullvad (port forwarding + WireGuard + privacy)
-- **Best Privacy:** Mullvad or ProtonVPN (Swiss/Swedish jurisdiction)
+- **Best Performance:** ProtonVPN Plus (port forwarding + WireGuard + Swiss privacy)
+- **Best Privacy:** Mullvad (no port forwarding since July 2023) or ProtonVPN
 - **Best Budget:** PIA ($2.19/month with port forwarding)
-- **Already Have NordVPN?** Works, but expect slower speeds without port forwarding
+- **Already Have Mullvad/NordVPN?** Works, but expect slower speeds without port forwarding
 
 **📖 Full comparison:** [docs/provider-comparison.md](docs/provider-comparison.md)
 
@@ -399,7 +399,7 @@ mkdir -p ~/Downloads/torrents
 
 Port forwarding significantly improves torrent performance by allowing incoming peer connections.
 
-**Supported Providers:** Mullvad, ProtonVPN (Plus+), Private Internet Access (PIA)
+**Supported Providers:** ProtonVPN (Plus+), Private Internet Access (PIA)
 
 #### Enable Port Forwarding
 
@@ -953,10 +953,12 @@ DOCKER_DEFAULT_PLATFORM=linux/arm64 docker-compose up -d
 - ✅ Fast speeds (10+ Gbps servers)
 - ✅ P2P/torrenting allowed
 
-**Recommended:**
-- **Mullvad** - Best privacy, port forwarding, flat rate
+**Recommended (with port forwarding):**
 - **ProtonVPN** - Port forwarding, secure core, Switzerland-based
 - **Private Internet Access (PIA)** - Port forwarding, many servers, affordable
+
+**Good privacy but no port forwarding:**
+- **Mullvad** - Best privacy, flat rate (port forwarding discontinued July 2023)
 
 **Avoid:**
 - Free VPNs (slow, logging, malware)
@@ -968,7 +970,7 @@ DOCKER_DEFAULT_PLATFORM=linux/arm64 docker-compose up -d
 - **Without:** You can download, but only from peers who have port forwarding (limited connectivity)
 - **With:** You become "connectable" — faster speeds, better seeding, healthier swarms
 
-**Supported Providers:** Mullvad, ProtonVPN (Plus+), Private Internet Access (PIA)
+**Supported Providers:** ProtonVPN (Plus+), Private Internet Access (PIA)
 
 **📖 See [docs/port-forwarding.md](docs/port-forwarding.md) for complete setup guide**
 

@@ -150,7 +150,7 @@ The wizard will guide you through:
 # Basic stack (VPN + qBittorrent)
 docker compose up -d
 
-# With port forwarding (Mullvad, ProtonVPN Plus, PIA)
+# With port forwarding (ProtonVPN Plus, PIA)
 docker compose --profile port-forwarding up -d
 
 # With monitoring (Prometheus + Grafana)
@@ -435,8 +435,8 @@ DOWNLOADS_PATH=/home/yourusername/Downloads/torrents
 **Solutions:**
 
 1. Verify your VPN provider supports port forwarding:
-   - ✅ Mullvad, ProtonVPN Plus, PIA
-   - ❌ NordVPN, Surfshark, ExpressVPN
+   - ✅ ProtonVPN Plus, PIA
+   - ❌ Mullvad (discontinued July 2023), NordVPN, Surfshark, ExpressVPN
 
 2. Enable port forwarding profile:
    ```bash

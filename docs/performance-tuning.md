@@ -261,7 +261,7 @@ OPENVPN_PROTOCOL=udp
 
 ## Expected Performance Ranges
 
-### With Port Forwarding + WireGuard (Mullvad, ProtonVPN Plus, PIA)
+### With Port Forwarding + WireGuard (ProtonVPN Plus, PIA)
 
 - **Download:** 200-400 Mbps
 - **Upload:** 100-250 Mbps
