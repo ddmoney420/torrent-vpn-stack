@@ -36,8 +36,14 @@ set -euo pipefail
 # Configuration
 # ============================================================================
 
-# Script directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Script directory (resolve symlinks for Homebrew compatibility)
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+    DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 PROJECT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 # Load .env if it exists

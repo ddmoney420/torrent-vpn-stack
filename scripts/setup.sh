@@ -13,8 +13,14 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Script directory
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Script directory (resolve symlinks for Homebrew compatibility)
+SOURCE="${BASH_SOURCE[0]}"
+while [ -L "$SOURCE" ]; do
+    DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 ENV_FILE="$PROJECT_ROOT/.env"
 ENV_EXAMPLE="$PROJECT_ROOT/.env.example"
