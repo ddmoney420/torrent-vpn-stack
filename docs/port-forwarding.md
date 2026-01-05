@@ -7,7 +7,7 @@
 - [Supported VPN Providers](#supported-vpn-providers)
 - [Quick Start](#quick-start)
 - [Provider-Specific Setup](#provider-specific-setup)
-  - [Mullvad](#mullvad)
+  - [Mullvad (Port Forwarding Discontinued)](#mullvad-port-forwarding-discontinued)
   - [ProtonVPN](#protonvpn)
   - [Private Internet Access (PIA)](#private-internet-access-pia)
 - [Verification](#verification)
