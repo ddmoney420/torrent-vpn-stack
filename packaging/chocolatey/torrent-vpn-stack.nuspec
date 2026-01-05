@@ -40,8 +40,12 @@ After installation:
     <docsUrl>https://github.com/ddmoney420/torrent-vpn-stack/tree/main/docs</docsUrl>
     <bugTrackerUrl>https://github.com/ddmoney420/torrent-vpn-stack/issues</bugTrackerUrl>
 
+    <!-- Note: Docker Desktop is required but not listed as a hard dependency
+         because it cannot be installed in Chocolatey's automated test environment
+         (Windows Server VM without Hyper-V/nested virtualization).
+         The install script checks for Docker and provides guidance if missing. -->
     <dependencies>
-      <dependency id="docker-desktop" version="4.0.0" />
+      <!-- No hard dependencies - Docker check is done at runtime -->
     </dependencies>
   </metadata>
   <files>

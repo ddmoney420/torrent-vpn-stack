@@ -2,11 +2,39 @@
 
 $ErrorActionPreference = 'Stop'
 
+# Check for Docker (warn but don't fail - allows installation in test environments)
+$dockerInstalled = $false
+$dockerWarning = $false
+
+if (Get-Command docker -ErrorAction SilentlyContinue) {
+    $dockerInstalled = $true
+    Write-Host "✓ Docker detected" -ForegroundColor Green
+} else {
+    $dockerWarning = $true
+    Write-Warning @"
+
+================================================================================
+  DOCKER NOT DETECTED
+================================================================================
+  Docker Desktop is REQUIRED to run torrent-vpn-stack but was not found.
+
+  Please install Docker Desktop for Windows:
+    choco install docker-desktop
+
+  Or download from: https://www.docker.com/products/docker-desktop
+
+  The package will continue to install, but you must install Docker Desktop
+  before using torrent-vpn-stack.
+================================================================================
+
+"@
+}
+
 # Package info
 $packageName = 'torrent-vpn-stack'
-$version = '1.0.0'
+$version = '1.0.1'
 $url = "https://github.com/ddmoney420/torrent-vpn-stack/archive/refs/tags/v$version.zip"
-$checksum = '038f02398241e1ceabeca4f4d6ae5dc9590d6dd8e6d28c6d3801ae4afa65a999'
+$checksum = 'ffd47d371825ce81add932c3dc8cdb90e19ba1d97d1c0a60605f6ad7ca6aa4c9'
 $checksumType = 'sha256'
 
 # Installation directory
