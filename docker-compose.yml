@@ -28,7 +28,7 @@ services:
       - WIREGUARD_PUBLIC_KEY=${WIREGUARD_PUBLIC_KEY:-}
       - WIREGUARD_PRESHARED_KEY=${WIREGUARD_PRESHARED_KEY:-}
       - WIREGUARD_ENDPOINT_IP=${WIREGUARD_ENDPOINT_IP:-}
-      - WIREGUARD_ENDPOINT_PORT=${WIREGUARD_ENDPOINT_PORT:-51820}
+      - WIREGUARD_ENDPOINT_PORT=${WIREGUARD_ENDPOINT_PORT:-}
 
       # OpenVPN Configuration (if using OpenVPN)
       - OPENVPN_USER=${OPENVPN_USER:-}
@@ -68,16 +68,19 @@ services:
       - SHADOWSOCKS=off
       - HEALTH_SERVER_ADDRESS=:9999
       - HEALTH_VPN_DURATION_INITIAL=6s
+      - HEALTH_VPN_DURATION_ADDITION=10s
+      - HEALTH_SUCCESS_WAIT_DURATION=10s
+      - HEALTH_TARGET_ADDRESS=cloudflare.com:80
 
     restart: unless-stopped
     networks:
       - vpn-network
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:9999/healthz || exit 1"]
-      interval: 60s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
 
   # qBittorrent - Torrent Client
   qbittorrent:
@@ -87,7 +90,7 @@ services:
     network_mode: "service:gluetun"
     depends_on:
       gluetun:
-        condition: service_healthy
+        condition: service_started
     environment:
       - PUID=${PUID:-1000}
       - PGID=${PGID:-1000}
