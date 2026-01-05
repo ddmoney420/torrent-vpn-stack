@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-01-05
+
+### Fixed
+
+- Fixed symlink resolution for Homebrew compatibility on macOS/Linux
+- Fixed CI workflow failures for automated testing
+- Improved Linux distribution compatibility visibility in documentation
+
+### Changed
+
+- Updated Chocolatey package copyright to 2026
+- Documentation improvements for Quick Start guide and README navigation
+
 ## [1.0.0] - 2026-01-04
 
 ### Added
