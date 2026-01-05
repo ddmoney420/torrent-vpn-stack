@@ -1,8 +1,14 @@
 # Torrent VPN Stack
 
 [![CI](https://github.com/ddmoney420/torrent-vpn-stack/workflows/CI/badge.svg)](https://github.com/ddmoney420/torrent-vpn-stack/actions)
+[![GitHub release](https://img.shields.io/github/v/release/ddmoney420/torrent-vpn-stack)](https://github.com/ddmoney420/torrent-vpn-stack/releases)
+[![GitHub stars](https://img.shields.io/github/stars/ddmoney420/torrent-vpn-stack)](https://github.com/ddmoney420/torrent-vpn-stack/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)](https://github.com/ddmoney420/torrent-vpn-stack)
+
+[![Homebrew](https://img.shields.io/badge/Homebrew-available-orange?logo=homebrew)](https://github.com/ddmoney420/homebrew-torrent-vpn-stack)
+[![AUR](https://img.shields.io/badge/AUR-available-blue?logo=archlinux)](https://aur.archlinux.org/packages/torrent-vpn-stack)
+[![Chocolatey](https://img.shields.io/chocolatey/v/torrent-vpn-stack?label=Chocolatey&logo=chocolatey)](https://community.chocolatey.org/packages/torrent-vpn-stack)
 
 > **Cross-platform containerized torrent downloader behind VPN using Gluetun + qBittorrent**
 
