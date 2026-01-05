@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>torrent-vpn-stack</id>
     <version>1.0.2</version>
@@ -8,11 +8,11 @@
     <owners>ddmoney420</owners>
     <licenseUrl>https://github.com/ddmoney420/torrent-vpn-stack/blob/main/LICENSE</licenseUrl>
     <projectUrl>https://github.com/ddmoney420/torrent-vpn-stack</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/ddmoney420/torrent-vpn-stack/main/assets/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>
-Cross-platform Docker Compose stack for secure torrenting via VPN using qBittorrent and Gluetun.
+    <description>Cross-platform Docker Compose stack for secure torrenting via VPN using qBittorrent and Gluetun.
 
-## Features
+Features:
 - Complete Docker Compose stack with VPN kill-switch
 - Cross-platform support (Windows, macOS, Linux)
 - Interactive setup wizard
@@ -20,36 +20,20 @@ Cross-platform Docker Compose stack for secure torrenting via VPN using qBittorr
 - Support for multiple VPN providers (Mullvad, ProtonVPN, NordVPN, etc.)
 - Port forwarding support for improved connectivity
 
-## Requirements
+Requirements:
 - Docker Desktop for Windows
 - VPN subscription (Mullvad, ProtonVPN, PIA, or others)
 - 8 GB RAM minimum (16 GB recommended)
 
-## Quick Start
-After installation:
+Quick Start:
 1. Run: torrent-vpn-setup
 2. Start: docker compose up -d
-3. Access qBittorrent at http://localhost:8080
-    </description>
+3. Access qBittorrent at http://localhost:8080</description>
     <summary>Secure torrenting stack with VPN, qBittorrent, and Gluetun</summary>
     <releaseNotes>https://github.com/ddmoney420/torrent-vpn-stack/blob/main/CHANGELOG.md</releaseNotes>
     <copyright>Copyright 2026</copyright>
     <tags>torrent vpn docker qbittorrent gluetun security privacy</tags>
-    <projectSourceUrl>https://github.com/ddmoney420/torrent-vpn-stack</projectSourceUrl>
-    <packageSourceUrl>https://github.com/ddmoney420/torrent-vpn-stack/tree/main/packaging/chocolatey</packageSourceUrl>
-    <docsUrl>https://github.com/ddmoney420/torrent-vpn-stack/tree/main/docs</docsUrl>
-    <bugTrackerUrl>https://github.com/ddmoney420/torrent-vpn-stack/issues</bugTrackerUrl>
-    <iconUrl>https://raw.githubusercontent.com/ddmoney420/torrent-vpn-stack/main/assets/icon.png</iconUrl>
-
-    <!-- Note: projectUrl is the project homepage, projectSourceUrl is where source code lives.
-         Since this is an open-source project hosted on GitHub, both point to the same location. -->
-
-    <!-- Note: Docker Desktop is required but not listed as a hard dependency
-         because it cannot be installed in Chocolatey's automated test environment
-         (Windows Server VM without Hyper-V/nested virtualization).
-         The install script checks for Docker and provides guidance if missing. -->
     <dependencies>
-      <!-- No hard dependencies - Docker check is done at runtime -->
     </dependencies>
   </metadata>
   <files>
