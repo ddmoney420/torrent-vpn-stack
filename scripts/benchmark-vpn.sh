@@ -33,11 +33,11 @@ PROVIDER_NAME="${VPN_SERVICE_PROVIDER:-unknown}"
 OUTPUT_FILE="${PROJECT_DIR}/benchmark-results.json"
 VERBOSE=false
 
-# Colors
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+# Colors (exported for use in subshells)
+export GREEN='\033[0;32m'
+export YELLOW='\033[1;33m'
+export BLUE='\033[0;34m'
+export NC='\033[0m'
 
 # Results
 declare -A RESULTS

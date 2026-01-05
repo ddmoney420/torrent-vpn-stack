@@ -314,7 +314,8 @@ restore_volume() {
     fi
 
     # Create safety backup of current state
-    local safety_backup="${BACKUP_DIR}/${VOLUME_NAME}-pre-restore-$(date +%Y-%m-%d-%H%M%S).tar.gz"
+    local safety_backup
+    safety_backup="${BACKUP_DIR}/${VOLUME_NAME}-pre-restore-$(date +%Y-%m-%d-%H%M%S).tar.gz"
     log_info "Creating safety backup of current state: ${safety_backup}"
 
     docker run --rm \

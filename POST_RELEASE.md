@@ -200,7 +200,7 @@
 
 ## 📝 Updating Packages for Future Releases
 
-### For v1.0.1, v1.1.0, etc.
+### For Future Versions
 
 1. **Create GitHub Release**
    ```bash
@@ -262,7 +262,7 @@ Once all packages are published:
 
 ---
 
-## 🎉 Congratulations!
+## 🎉 Congratulations
 
 Once all packages are published, users can install with a single command on any platform!
 

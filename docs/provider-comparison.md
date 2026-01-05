@@ -187,14 +187,14 @@
 
 ## Port Forwarding Impact
 
-### With Port Forwarding (Mullvad, ProtonVPN Plus, PIA):
+### With Port Forwarding (Mullvad, ProtonVPN Plus, PIA)
 - ✅ Connect to ALL peers in swarm
 - ✅ Better download speeds
 - ✅ Much better upload/seeding performance
 - ✅ More connections to rare torrents
 - ✅ Faster torrent startup
 
-### Without Port Forwarding (NordVPN, Surfshark, ExpressVPN):
+### Without Port Forwarding (NordVPN, Surfshark, ExpressVPN)
 - ⚠️ Can ONLY connect to peers with open ports (~30-40% of swarm)
 - ⚠️ Slower downloads on less-popular torrents
 - ⚠️ Very poor seeding performance

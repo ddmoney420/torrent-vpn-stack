@@ -293,7 +293,7 @@ cat ~/Library/Logs/torrent-vpn-stack-backup-error.log
 
 **A**: Yes, the backup script creates read-only snapshots and doesn't interrupt running containers.
 
-###Q: What's the difference between volume backup and file backup?
+### Q: What's the difference between volume backup and file backup?
 
 **A**:
 - **Volume Backup** (this solution): Backs up Docker volumes containing config

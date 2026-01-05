@@ -77,7 +77,7 @@ Then follow the [Quick Start Guide](QUICKSTART.md) for setup.
 - [Installation](#installation)
   - [Package Managers (Recommended)](#package-managers-recommended)
   - [Manual Installation](#manual-installation-git-clone)
-- [Quick Start (Inline)](#quick-start-1)
+- [Quick Start (Inline)](#quick-start)
 - [Detailed Setup](#detailed-setup)
 - [Configuration](#configuration)
 - [Usage](#usage)

@@ -42,7 +42,7 @@ Optimize Docker Desktop for better performance:
 
 3. **Apply & Restart**
 
-### Why It Matters:
+### Why It Matters
 - More CPUs = Better encryption performance
 - More RAM = More connections, better caching
 - More Disk = Prometheus metrics storage

@@ -91,6 +91,7 @@ jobs:
           echo "Platform name: $PLATFORM_NAME"
 
       - name: Validate Docker Compose
+        if: runner.os == 'Linux'
         run: docker compose config --quiet
 
       - name: Test backup script syntax (Unix)

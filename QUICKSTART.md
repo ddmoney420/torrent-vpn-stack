@@ -274,7 +274,7 @@ Should show your **VPN provider's IP**, NOT your real IP.
 
 ## Next Steps
 
-### ✅ You're All Set! Now you can:
+### ✅ You're All Set
 
 1. **Add torrents** via the qBittorrent web UI
 2. **Configure automatic backups**: See [Backup Guide](docs/backup-guide.md)
