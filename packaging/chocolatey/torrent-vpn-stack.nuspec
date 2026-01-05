@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>torrent-vpn-stack</id>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <title>Torrent VPN Stack</title>
     <authors>ddmoney420</authors>
     <owners>ddmoney420</owners>
@@ -39,6 +39,10 @@ After installation:
     <packageSourceUrl>https://github.com/ddmoney420/torrent-vpn-stack/tree/main/packaging/chocolatey</packageSourceUrl>
     <docsUrl>https://github.com/ddmoney420/torrent-vpn-stack/tree/main/docs</docsUrl>
     <bugTrackerUrl>https://github.com/ddmoney420/torrent-vpn-stack/issues</bugTrackerUrl>
+    <iconUrl>https://raw.githubusercontent.com/ddmoney420/torrent-vpn-stack/main/assets/icon.png</iconUrl>
+
+    <!-- Note: projectUrl is the project homepage, projectSourceUrl is where source code lives.
+         Since this is an open-source project hosted on GitHub, both point to the same location. -->
 
     <!-- Note: Docker Desktop is required but not listed as a hard dependency
          because it cannot be installed in Chocolatey's automated test environment

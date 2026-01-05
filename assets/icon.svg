@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="120" fill="#2d3748"/>
+
+  <!-- VPN Shield -->
+  <path d="M128 40 L188 70 L188 130 C188 170 160 200 128 216 C96 200 68 170 68 130 L68 70 Z"
+        fill="#4299e1" stroke="#2b6cb0" stroke-width="4"/>
+
+  <!-- Lock icon inside shield -->
+  <rect x="108" y="110" width="40" height="35" rx="4" fill="#2d3748"/>
+  <path d="M113 110 L113 95 C113 80 143 80 143 95 L143 110"
+        fill="none" stroke="#2d3748" stroke-width="8"/>
+  <circle cx="128" cy="125" r="6" fill="#48bb78"/>
+  <rect x="125" y="125" width="6" height="12" fill="#48bb78"/>
+
+  <!-- Download arrow (torrent symbol) -->
+  <path d="M128 150 L140 165 L133 165 L133 180 L123 180 L123 165 L116 165 Z" fill="#48bb78"/>
+</svg>
