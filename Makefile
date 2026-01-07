@@ -7,11 +7,12 @@ GOTEST=$(GOCMD) test
 GOMOD=$(GOCMD) mod
 GOFMT=$(GOCMD) fmt
 BINARY_DAEMON=build/daemon
-BINARY_CLI=build/mediadownloader
+BINARY_CLI=build/mediastack
 VERSION?=2.0.0-alpha
 
 # Build targets
-build: build-daemon build-cli
+# Note: daemon is currently disabled as we've pivoted to orchestration approach
+build: build-cli
 
 build-daemon:
 	@echo "Building daemon..."
@@ -58,19 +59,19 @@ release:
 
 	# Linux amd64
 	GOOS=linux GOARCH=amd64 $(GOBUILD) -o build/release/daemon-linux-amd64 ./cmd/daemon
-	GOOS=linux GOARCH=amd64 $(GOBUILD) -o build/release/mediadownloader-linux-amd64 ./cmd/cli
+	GOOS=linux GOARCH=amd64 $(GOBUILD) -o build/release/mediastack-linux-amd64 ./cmd/cli
 
 	# macOS amd64 (Intel)
 	GOOS=darwin GOARCH=amd64 $(GOBUILD) -o build/release/daemon-darwin-amd64 ./cmd/daemon
-	GOOS=darwin GOARCH=amd64 $(GOBUILD) -o build/release/mediadownloader-darwin-amd64 ./cmd/cli
+	GOOS=darwin GOARCH=amd64 $(GOBUILD) -o build/release/mediastack-darwin-amd64 ./cmd/cli
 
 	# macOS arm64 (Apple Silicon)
 	GOOS=darwin GOARCH=arm64 $(GOBUILD) -o build/release/daemon-darwin-arm64 ./cmd/daemon
-	GOOS=darwin GOARCH=arm64 $(GOBUILD) -o build/release/mediadownloader-darwin-arm64 ./cmd/cli
+	GOOS=darwin GOARCH=arm64 $(GOBUILD) -o build/release/mediastack-darwin-arm64 ./cmd/cli
 
 	# Windows amd64
 	GOOS=windows GOARCH=amd64 $(GOBUILD) -o build/release/daemon-windows-amd64.exe ./cmd/daemon
-	GOOS=windows GOARCH=amd64 $(GOBUILD) -o build/release/mediadownloader-windows-amd64.exe ./cmd/cli
+	GOOS=windows GOARCH=amd64 $(GOBUILD) -o build/release/mediastack-windows-amd64.exe ./cmd/cli
 
 	@echo "Release binaries built in build/release/"
 
