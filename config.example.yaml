@@ -1,0 +1,42 @@
+# Media Downloader Configuration Example
+# Copy to ~/.config/mediadownloader/config.yaml and customize
+
+server:
+  host: 127.0.0.1
+  port: 8080
+
+downloads:
+  path: /downloads
+  temp_path: /downloads/.tmp
+  concurrent_jobs: 3
+
+vpn:
+  enabled: false  # Set to true to enable VPN integration
+  provider: wireguard  # wireguard or openvpn
+  config_path: /etc/wireguard/wg0.conf
+  kill_switch: true
+  health_check_interval: 60  # seconds
+
+providers:
+  http:
+    enabled: true
+    max_retries: 5
+    chunk_size: 10MB
+
+  bittorrent:
+    enabled: false  # Optional: Enable for torrent support
+    port: 6881
+    dht: true
+    max_upload_rate: 1MB
+
+  usenet:
+    enabled: false  # Future: Usenet support
+    # server: news.example.com
+    # port: 563
+    # username: ""
+    # password: ""
+
+notifications:
+  webhooks: []
+    # - url: https://example.com/webhook
+    #   events: [download_complete, download_failed]
