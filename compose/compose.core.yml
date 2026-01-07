@@ -1,0 +1,141 @@
+# Core Services - VPN + Download Clients + Prowlarr
+# These services form the foundation of the media stack
+
+version: '3.8'
+
+services:
+  # VPN Gateway - All download traffic routes through this
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      # qBittorrent Web UI
+      - "${QBITTORRENT_PORT:-8080}:8080"
+      # SABnzbd Web UI
+      - "${SABNZBD_PORT:-8081}:8081"
+      # Torrent connections
+      - "${TORRENT_PORT:-6881}:6881"
+      - "${TORRENT_PORT:-6881}:6881/udp"
+      # Gluetun control server
+      - "${GLUETUN_CONTROL_PORT:-8000}:8000"
+    volumes:
+      - gluetun-config:/gluetun
+    environment:
+      # VPN Provider
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE:-wireguard}
+
+      # WireGuard Configuration
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      - WIREGUARD_PUBLIC_KEY=${WIREGUARD_PUBLIC_KEY:-}
+      - WIREGUARD_PRESHARED_KEY=${WIREGUARD_PRESHARED_KEY:-}
+      - WIREGUARD_ENDPOINT_IP=${WIREGUARD_ENDPOINT_IP:-}
+      - WIREGUARD_ENDPOINT_PORT=${WIREGUARD_ENDPOINT_PORT:-}
+
+      # OpenVPN Configuration (if using OpenVPN)
+      - OPENVPN_USER=${OPENVPN_USER:-}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD:-}
+
+      # Server Selection
+      - SERVER_COUNTRIES=${SERVER_COUNTRIES:-}
+      - SERVER_CITIES=${SERVER_CITIES:-}
+      - SERVER_HOSTNAMES=${SERVER_HOSTNAMES:-}
+
+      # DNS Configuration (critical for leak protection)
+      - DOT=on
+      - DOT_PROVIDERS=cloudflare
+      - BLOCK_MALICIOUS=on
+      - DISABLE_IPV6=yes
+
+      # Firewall (Kill Switch)
+      - FIREWALL_OUTBOUND_SUBNETS=${LOCAL_SUBNET:-192.168.1.0/24}
+      - FIREWALL_VPN_INPUT_PORTS=${TORRENT_PORT:-6881}
+
+      # Port Forwarding
+      - VPN_PORT_FORWARDING=${VPN_PORT_FORWARDING:-off}
+      - VPN_PORT_FORWARDING_PROVIDER=${VPN_PORT_FORWARDING_PROVIDER:-}
+
+      # General
+      - TZ=${TZ:-America/Los_Angeles}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+
+      # Health check
+      - HEALTH_SERVER_ADDRESS=:9999
+      - HEALTH_VPN_DURATION_INITIAL=6s
+      - HEALTH_VPN_DURATION_ADDITION=10s
+    restart: unless-stopped
+    networks:
+      - media-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:9999/healthz || exit 1"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+
+  # qBittorrent - Torrent Client
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: "service:gluetun"  # Share Gluetun's network (kill switch)
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+      - WEBUI_PORT=8080
+      - DOCKER_MODS=ghcr.io/gabe565/linuxserver-mod-vuetorrent
+    volumes:
+      - qbittorrent-config:/config
+      - ${DOWNLOADS_PATH}/torrents:/downloads
+    restart: unless-stopped
+
+  # SABnzbd - Usenet Client
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    network_mode: "service:gluetun"  # Share Gluetun's network (kill switch)
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - sabnzbd-config:/config
+      - ${DOWNLOADS_PATH}/usenet:/downloads
+    restart: unless-stopped
+
+  # Prowlarr - Indexer Manager
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - prowlarr-config:/config
+    ports:
+      - "${PROWLARR_PORT:-9696}:9696"
+    restart: unless-stopped
+    networks:
+      - media-network
+
+volumes:
+  gluetun-config:
+  qbittorrent-config:
+  sabnzbd-config:
+  prowlarr-config:
+
+networks:
+  media-network:
+    driver: bridge
