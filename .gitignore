@@ -30,10 +30,12 @@ Temporary Items
 # Docker volumes (if using bind mounts)
 data/
 downloads/
-config/
+/config/
 # Exception: Allow monitoring config files (not sensitive)
 !config/prometheus/
 !config/grafana/
+# Exception: Allow Go internal/config package
+!internal/config/
 
 # Logs
 *.log

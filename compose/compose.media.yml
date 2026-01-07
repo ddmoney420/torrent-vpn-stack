@@ -1,0 +1,91 @@
+# Media Management Services - *arr Suite
+# Sonarr, Radarr, Lidarr, Readarr for automated media organization
+
+version: '3.8'
+
+services:
+  # Sonarr - TV Show Management
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - sonarr-config:/config
+      - ${MEDIA_PATH}/tv:/tv
+      - ${DOWNLOADS_PATH}:/downloads
+    ports:
+      - "${SONARR_PORT:-8989}:8989"
+    restart: unless-stopped
+    networks:
+      - media-network
+
+  # Radarr - Movie Management
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - radarr-config:/config
+      - ${MEDIA_PATH}/movies:/movies
+      - ${DOWNLOADS_PATH}:/downloads
+    ports:
+      - "${RADARR_PORT:-7878}:7878"
+    restart: unless-stopped
+    networks:
+      - media-network
+
+  # Lidarr - Music Management (Optional)
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - lidarr-config:/config
+      - ${MEDIA_PATH}/music:/music
+      - ${DOWNLOADS_PATH}:/downloads
+    ports:
+      - "${LIDARR_PORT:-8686}:8686"
+    restart: unless-stopped
+    networks:
+      - media-network
+    profiles:
+      - music  # Optional: Enable with --profile music
+
+  # Readarr - Book Management (Optional)
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - readarr-config:/config
+      - ${MEDIA_PATH}/books:/books
+      - ${DOWNLOADS_PATH}:/downloads
+    ports:
+      - "${READARR_PORT:-8787}:8787"
+    restart: unless-stopped
+    networks:
+      - media-network
+    profiles:
+      - books  # Optional: Enable with --profile books
+
+volumes:
+  sonarr-config:
+  radarr-config:
+  lidarr-config:
+  readarr-config:
+
+networks:
+  media-network:
+    external: true  # Reuse network from compose.core.yml

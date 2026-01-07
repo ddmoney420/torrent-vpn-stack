@@ -1,0 +1,48 @@
+# Request Management - Jellyseerr / Overseerr
+# User-friendly interfaces for requesting media
+
+version: '3.8'
+
+services:
+  # Jellyseerr - Request Management for Jellyfin
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=info
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - jellyseerr-config:/app/config
+    ports:
+      - "${JELLYSEERR_PORT:-5055}:5055"
+    restart: unless-stopped
+    networks:
+      - media-network
+    profiles:
+      - jellyfin  # Enable with --profile jellyfin
+
+  # Overseerr - Request Management for Plex
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Los_Angeles}
+    volumes:
+      - overseerr-config:/config
+    ports:
+      - "${OVERSEERR_PORT:-5055}:5055"
+    restart: unless-stopped
+    networks:
+      - media-network
+    profiles:
+      - plex  # Enable with --profile plex
+
+volumes:
+  jellyseerr-config:
+  overseerr-config:
+
+networks:
+  media-network:
+    external: true
